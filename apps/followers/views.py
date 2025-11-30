@@ -33,17 +33,14 @@ class PostFollowerViewSet(BaseViewSet):
         return Response(status=status.HTTP_403_FORBIDDEN)
 
     def create(self, request, post_uuid=None):
-        data = request.data
+        data = request.data.copy()
         if not request.user.is_authenticated:
             return Response(
                 {'error': 'Unauthorized user'},
                 status=status.HTTP_401_UNAUTHORIZED
             )
-        if data['follower'] != request.user.pk:
-            return Response(
-                {'error': 'Spoofing detected'},
-                status=status.HTTP_403_FORBIDDEN
-            )
+        # Automatically set the follower to the authenticated user
+        data['follower'] = request.user.pk
         if post_uuid is not None:
             try:
                 data['post'] = Post.objects.get(uuid=post_uuid).pk

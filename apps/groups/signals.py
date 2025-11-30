@@ -7,16 +7,17 @@ from groups.services import assign_permissions
 def member_request_created_hook(sender, instance, created, **kwargs):
     if created and instance:
         if instance.group.group_type == "PUBLIC":
-            member, created = GroupMember.objects.create(
+            member, member_created = GroupMember.objects.get_or_create(
                 group=instance.group,
                 user=instance.user
             )
 
-@receiver(pre_save, sender=GroupMember)
-def permissions_for_member_type(sender, instance, created, **kwargs):
-    if created.id:
-        assign_permissions(
-            instance.member_type,
-            instance.member,
-            instance.group
-        )
+# Temporarily disabled - requires custom permissions to be set up
+# @receiver(post_save, sender=GroupMember)
+# def permissions_for_member_type(sender, instance, created, **kwargs):
+#     if created:
+#         assign_permissions(
+#             instance.member_type,
+#             instance.user,
+#             instance.group
+#         )
