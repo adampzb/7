@@ -1,11 +1,30 @@
 # Django Reddit Clone
 
 [![Python](https://img.shields.io/badge/Python-3.12-blue?style=flat&logo=python&logoColor=white)](https://www.python.org/)
-[![Django](https://img.shields.io/badge/Django-3.1.14-brightgreen?style=flat&logo=django&logoColor=white)](https://www.djangoproject.com/)
-[![Django Rest Framework](https://img.shields.io/badge/Django_Rest_Framework-3.11.2-red?style=flat&logo=django&logoColor=white)](https://www.django-rest-framework.org/)
-[![Angular](https://img.shields.io/badge/Angular-10-blueviolet?style=flat&logo=angular&logoColor=white)](https://angular.io/)
+[![Django](https://img.shields.io/badge/Django-5.2.8-brightgreen?style=flat&logo=django&logoColor=white)](https://www.djangoproject.com/)
+[![Django Rest Framework](https://img.shields.io/badge/Django_Rest_Framework-3.16.1-red?style=flat&logo=django&logoColor=white)](https://www.django-rest-framework.org/)
+[![Angular](https://img.shields.io/badge/Angular-21.0.1-blueviolet?style=flat&logo=angular&logoColor=white)](https://angular.io/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
-A **full-stack Reddit clone** built with **Django REST Framework** backend and **Angular** frontend. This application provides a complete social media platform with user authentication, community features, and real-time interactions.
+A **modern full-stack Reddit clone** built with **Django REST Framework** backend and **Angular** frontend. This application provides a complete social media platform with user authentication, community features, and real-time interactions, now updated to the latest framework versions for enhanced security and performance.
+
+## ✨ Recent Updates (November 2025)
+
+### 🔄 Major Framework Updates
+- **Angular**: Updated from 19.2.16 → **21.0.1** (latest stable)
+- **Django**: Updated from 5.1.3 → **5.2.8** (latest stable)
+- **TypeScript**: Updated to **5.9.3** for modern JavaScript features
+- **Dependencies**: All packages updated to latest secure versions
+
+### 🛡️ Security Improvements
+- **Vulnerability Resolution**: Replaced CKEditor with Quill.js to resolve npm security issues
+- **Package Updates**: All dependencies updated to latest versions with security patches
+- **Authentication**: Updated to dj-rest-auth 7.0.1 with enhanced security features
+
+### 🚀 Performance Enhancements
+- **Build Optimization**: Improved bundle sizes and lazy loading
+- **Modern JavaScript**: TypeScript 5.9.3 with latest language features
+- **Framework Benefits**: Angular 21 performance improvements and Django 5.2.8 optimizations
 
 ## 🚀 Features
 
@@ -34,15 +53,16 @@ A **full-stack Reddit clone** built with **Django REST Framework** backend and *
 ## 🔧 Requirements
 
 ### Backend
-- Python 3.8+
-- Django 3.1.14
-- Django REST Framework 3.11.2
+- Python 3.12+
+- Django 5.2.8 (latest stable)
+- Django REST Framework 3.16.1
 - SQLite (default) or PostgreSQL
 
 ### Frontend
-- Node.js 14+ (with legacy OpenSSL provider support)
-- Angular 10
-- Angular CLI
+- Node.js 20+ (recommended)
+- Angular 21.0.1 (latest stable)
+- Angular CLI 21.0.1
+- TypeScript 5.9.3
 
 ## ⚙️ Quick Start
 
@@ -77,7 +97,7 @@ cd static/frontend/reddit-app
 npm install
 
 # Start Angular development server
-NODE_OPTIONS="--openssl-legacy-provider" ng serve --host 0.0.0.0 --port 4200
+ng serve --host 0.0.0.0 --port 4200
 ```
 
 ### 3. Access the Application
@@ -163,15 +183,15 @@ for report_type in report_types:
 
 ### Common Issues
 
-1. **Angular Compilation Errors**
+1. **Build Warnings**
    ```bash
-   # Use legacy OpenSSL provider for Node.js compatibility
-   NODE_OPTIONS="--openssl-legacy-provider" ng serve
+   # Minor CommonJS warning from Quill.js (cosmetic only)
+   # Warning: quill-delta CommonJS dependency - does not affect functionality
    ```
 
-2. **TypeScript Errors**
-   - The project includes `skipLibCheck: true` in `tsconfig.json` for compatibility
-   - Froala editor is temporarily disabled due to type conflicts
+2. **TypeScript Configuration**
+   - Modern TypeScript 5.9.3 with Angular 21 compatibility
+   - Quill.js rich text editor integrated for content creation
 
 3. **CORS Issues**
    - Backend is configured with `django-cors-headers`
@@ -183,6 +203,13 @@ for report_type in report_types:
    rm db.sqlite3
    python manage.py migrate
    python manage.py createsuperuser
+   ```
+
+5. **Package Updates**
+   ```bash
+   # Keep packages updated for security
+   pip install --upgrade -r requirements.txt
+   npm update
    ```
 
 
