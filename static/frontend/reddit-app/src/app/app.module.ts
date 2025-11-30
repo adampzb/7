@@ -21,7 +21,7 @@ import { HttpXsrfInterceptor } from './auth.header.interceptor';
 
 // TimeSinceModule is not compatible with Angular 19 - will need to replace with custom pipe
 // import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
-import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { QuillModule } from 'ngx-quill';
 // FlexLayout is deprecated in Angular 19, using CSS Grid/Flexbox instead
 import { SafeContentPipe } from '@reddit/core/pipes/safe-content/safe-content.pipe';
 import { TimeSincePipe } from '@reddit/core/pipes/time-since/time-since.pipe';
@@ -121,7 +121,7 @@ import { GroupSearchComponent } from './group/group-search/group-search.componen
     MaterialModule,
     // FroalaViewModule.forRoot(),
     // FroalaEditorModule.forRoot(),
-    CKEditorModule,
+    QuillModule.forRoot(),
     AppRoutingModule,
   ],
   providers: [  CookieService,

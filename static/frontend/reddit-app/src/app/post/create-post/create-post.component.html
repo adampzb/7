@@ -24,13 +24,12 @@
       <div class=""></div>
 
       <div class="editor-container width-100">
-        <ckeditor 
-          [editor]="Editor" 
-          [config]="editorConfig"
+        <quill-editor 
+          [modules]="quillConfig"
           formControlName="content"
-          (ready)="onEditorReady($event)"
-          (change)="onEditorChange($event, $event.editor)">
-        </ckeditor>
+          (onEditorCreated)="onEditorReady($event)"
+          (onContentChanged)="onEditorChange($event)">
+        </quill-editor>
       </div>
 
       <!-- <input type="file"  formControlName="cover" (change)="onFileSelected($event.target.files)" #fileUpload> -->

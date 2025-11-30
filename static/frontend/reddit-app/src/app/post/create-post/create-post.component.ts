@@ -7,7 +7,6 @@ import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 import { MatDialog } from '@angular/material/dialog';
 import { HttpEventType } from '@angular/common/http';
 // import FroalaEditor from 'froala-editor';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { PostService } from '@reddit/core/services/post/post.service';
 import { UserService } from '@reddit/core/services/user/user.service';
 import { GroupService } from '@reddit/core/services/group/group.service';
@@ -22,35 +21,19 @@ import { Group } from '@reddit/core/models/group.model';
   styleUrls: ['./create-post.component.scss']
 })
 export class CreatePostComponent implements OnInit {
-  public Editor = ClassicEditor;
-  public editorConfig = {
-    toolbar: {
-      items: [
-        'heading',
-        '|',
-        'bold',
-        'italic',
-        'link',
-        'bulletedList',
-        'numberedList',
-        '|',
-        'outdent',
-        'indent',
-        '|',
-        'blockQuote',
-        'insertTable',
-        'undo',
-        'redo'
-      ]
-    },
-    language: 'en',
-    table: {
-      contentToolbar: [
-        'tableColumn',
-        'tableRow',
-        'mergeTableCells'
-      ]
-    }
+  public quillConfig = {
+    toolbar: [
+      ['bold', 'italic', 'underline', 'strike'],
+      ['blockquote', 'code-block'],
+      [{ 'header': 1 }, { 'header': 2 }],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      [{ 'script': 'sub'}, { 'script': 'super' }],
+      [{ 'indent': '-1'}, { 'indent': '+1' }],
+      ['link'],
+      ['clean']
+    ],
+    placeholder: 'Write your post content here...',
+    theme: 'snow'
   };
 
   postForm: FormGroup;
@@ -93,12 +76,12 @@ export class CreatePostComponent implements OnInit {
   }
 
   public onEditorReady(editor: any) {
-    console.log('CKEditor is ready to use!', editor);
+    console.log('Quill editor is ready to use!', editor);
   }
 
-  public onEditorChange(event: any, editor: any) {
-    const data = editor.getData();
-    this.postForm.patchValue({ content: data });
+  public onEditorChange(event: any) {
+    // Quill provides the content directly in the event
+    this.postForm.patchValue({ content: event.html });
   }
 
   getAuthUser(): void {
