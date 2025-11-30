@@ -37,8 +37,6 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # Angular app routes - catch all routes under django_reddit/
-    re_path(r'^django_reddit/.*$', AngularAppView.as_view(), name='angular_app'),
     path('accounts/', include('allauth.urls')),
     re_path(r'^rest-auth/', include('dj_rest_auth.urls')),
     re_path(r'^rest-auth/registration/', include('dj_rest_auth.registration.urls')),
@@ -49,7 +47,7 @@ urlpatterns = [
     path('', include('groups.urls')),
     path('', include('profiles.urls')),
     path('', include('reports.urls')),
-        path(
+    path(
         "api/swagger/",
         schema_view.with_ui("swagger", cache_timeout=0),
         name="swagger-docs",
@@ -59,4 +57,8 @@ urlpatterns = [
         schema_view.with_ui("redoc", cache_timeout=0),
         name="redoc-docs",
     ),
+    # Angular app routes - catch all remaining routes at the end
+    re_path(r'^django_reddit/.*$', AngularAppView.as_view(), name='angular_app'),
+    # Serve Angular app at root for any unmatched routes (SPA routing)
+    re_path(r'^.*$', AngularAppView.as_view(), name='angular_app_root'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
