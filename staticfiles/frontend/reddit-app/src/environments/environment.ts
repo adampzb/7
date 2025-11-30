@@ -6,12 +6,12 @@ export const environment = {
   baseUrl: '/api/v1/',
   serverUrl: (typeof window !== 'undefined' && window.location.hostname === 'localhost') 
     ? 'http://localhost:12000' 
-    : 'https://work-1-zwuvwfqbmhtodnal.prod-runtime.all-hands.dev',
+    : 'https://work-1-nqwjlllrarvzwimi.prod-runtime.all-hands.dev',
   appUrl: (typeof window !== 'undefined' && window.location.hostname === 'localhost') 
     ? 'http://localhost:12001' 
-    : 'https://work-2-zwuvwfqbmhtodnal.prod-runtime.all-hands.dev/django_reddit',
+    : 'https://work-2-nqwjlllrarvzwimi.prod-runtime.all-hands.dev/django_reddit',
   loginUrl: (typeof window !== 'undefined' && window.location.hostname === 'localhost') 
     ? 'http://localhost:12001/sign-in' 
-    : 'https://work-2-zwuvwfqbmhtodnal.prod-runtime.all-hands.dev/django_reddit/sign-in',
+    : 'https://work-2-nqwjlllrarvzwimi.prod-runtime.all-hands.dev/django_reddit/sign-in',
   staticUrl: '../assets/images/'
 };
