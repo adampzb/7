@@ -84,9 +84,9 @@ export class AppComponent implements OnInit, AfterContentChecked {
   testApiConnectivity(): void {
     console.log('Testing API connectivity...');
     // Test a simple GET request to see if the API is reachable
-    const apiUrl = `${environment.serverUrl}${environment.baseUrl}posts/`;
-    console.log('Testing API URL:', apiUrl);
-    this.http.get(apiUrl).subscribe(
+    const testUrl = `${environment.serverUrl}${environment.baseUrl}posts/`;
+    console.log('Testing API URL:', testUrl);
+    this.http.get(testUrl).subscribe(
       (response) => {
         console.log('✅ API connectivity test successful:', response);
       },
