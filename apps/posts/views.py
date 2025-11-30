@@ -82,11 +82,11 @@ class PostSelfViewSet(BaseViewSet):
         return queryset
 
     def create(self, request):
-        data = request.data
+        data = request.data.copy()
         if not request.user.is_authenticated:
             return Response({'error':'The user is anonymous'}, status=status.HTTP_401_UNAUTHORIZED)
-        if data['author'] != request.user.pk:
-            return Response({'error': 'Spoofing detected'}, status=status.HTTP_403_FORBIDDEN)
+        # Automatically set the author to the authenticated user
+        data['author'] = request.user.pk
 
         serializer_class = self.get_serializer_class()
         serializer = serializer_class(data=data)
