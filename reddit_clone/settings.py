@@ -42,11 +42,19 @@ ENVIRONMENT = get_env_variable('ENVIRONMENT', 'development')
 
 if ENVIRONMENT == 'production':
     DEBUG = False
-    ALLOWED_HOSTS = get_env_variable('ALLOWED_HOSTS', '').split(',')
-    if not ALLOWED_HOSTS or ALLOWED_HOSTS == ['']:
-        ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+    allowed_hosts_env = get_env_variable('ALLOWED_HOSTS', '')
+    if allowed_hosts_env:
+        ALLOWED_HOSTS = [host.strip() for host in allowed_hosts_env.split(',') if host.strip()]
+    else:
+        # Default production hosts
+        ALLOWED_HOSTS = [
+            'localhost', 
+            '127.0.0.1',
+            'work-1-pumwxxszeoqwqlkx.prod-runtime.all-hands.dev',
+            'work-2-pumwxxszeoqwqlkx.prod-runtime.all-hands.dev'
+        ]
 else:
-    # Development settings
+    # Development settings - Allow all hosts for flexibility
     ALLOWED_HOSTS = ['*']
 
 
@@ -83,7 +91,9 @@ INSTALLED_APPS = [
     'apps.bookmarks',
     'apps.followers',
     'apps.reports',
-    'apps.groups'
+    'apps.groups',
+    'apps.media',
+    'apps.locations'
 ]
 
 REST_FRAMEWORK = {
@@ -301,14 +311,51 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
 
-# CORS_REPLACE_HTTPS_REFERER removed in django-cors-headers 4.x
-CORS_ORIGIN_ALLOW_ALL = True
+# CORS Configuration - Universal environment support
 CORS_ALLOW_CREDENTIALS = True
 CORS_PREFLIGHT_MAX_AGE = 86400
 
-# CORS Configuration
-cors_origins = get_env_variable('CORS_ALLOWED_ORIGINS', 'https://work-1-zwuvwfqbmhtodnal.prod-runtime.all-hands.dev,https://work-2-zwuvwfqbmhtodnal.prod-runtime.all-hands.dev,http://localhost:4200,http://127.0.0.1:4200')
-CORS_ALLOWED_ORIGINS = [origin.strip() for origin in cors_origins.split(',') if origin.strip()]
+# Environment-based CORS configuration
+if ENVIRONMENT == 'production':
+    # Production: Use specific allowed origins from environment
+    cors_origins = get_env_variable('CORS_ALLOWED_ORIGINS', '')
+    if cors_origins:
+        CORS_ALLOWED_ORIGINS = [origin.strip() for origin in cors_origins.split(',') if origin.strip()]
+        CORS_ORIGIN_ALLOW_ALL = False
+    else:
+        # Fallback: Allow all origins in production if not specified (not recommended)
+        CORS_ORIGIN_ALLOW_ALL = True
+else:
+    # Development: Allow all origins for flexibility across different environments
+    CORS_ORIGIN_ALLOW_ALL = True
+    # Also set specific origins for better security when possible
+    cors_origins = get_env_variable('CORS_ALLOWED_ORIGINS', 
+        'http://localhost:4200,http://127.0.0.1:4200,http://localhost:12001,http://127.0.0.1:12001,'
+        'https://work-1-pumwxxszeoqwqlkx.prod-runtime.all-hands.dev,'
+        'https://work-2-pumwxxszeoqwqlkx.prod-runtime.all-hands.dev')
+    CORS_ALLOWED_ORIGINS = [origin.strip() for origin in cors_origins.split(',') if origin.strip()]
+
+# Additional CORS headers for better compatibility
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
 
 
 ####################################
