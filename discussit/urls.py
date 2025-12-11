@@ -64,7 +64,6 @@ urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 # Angular app routes - must come after static/media files
 urlpatterns += [
-    re_path(r'^django_reddit/.*$', AngularAppView.as_view(), name='angular_app'),
     # Serve Angular app at root for any unmatched routes (SPA routing)
-    re_path(r'^.*$', AngularAppView.as_view(), name='angular_app_root'),
+    re_path(r'^.*$', AngularAppView.as_view(), name='angular_app'),
 ]
