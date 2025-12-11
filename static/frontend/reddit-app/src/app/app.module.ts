@@ -23,8 +23,8 @@ import { HttpXsrfInterceptor } from './auth.header.interceptor';
 // import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { QuillModule } from 'ngx-quill';
 // FlexLayout is deprecated in Angular 19, using CSS Grid/Flexbox instead
-import { SafeContentPipe } from '@reddit/core/pipes/safe-content/safe-content.pipe';
-import { TimeSincePipe } from '@reddit/core/pipes/time-since/time-since.pipe';
+import { SafeContentPipe } from '@discussit/core/pipes/safe-content/safe-content.pipe';
+import { TimeSincePipe } from '@discussit/core/pipes/time-since/time-since.pipe';
 
 import { PostComponent } from './post/post/post.component';
 import { CreatePostComponent } from './post/create-post/create-post.component';

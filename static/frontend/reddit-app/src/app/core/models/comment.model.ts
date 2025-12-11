@@ -1,5 +1,5 @@
-import { CommentService } from '@reddit/core/services/comment/comment.service';
-import { User } from '@reddit/core/models/user.model';
+import { CommentService } from '@discussit/core/services/comment/comment.service';
+import { User } from '@discussit/core/models/user.model';
 
 
 export class Comment {

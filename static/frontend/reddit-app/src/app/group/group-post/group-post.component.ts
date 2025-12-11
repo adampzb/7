@@ -1,12 +1,12 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PostService } from '@reddit/core/services/post/post.service';
-import { UserService } from '@reddit/core/services/user/user.service';
-import { GroupService } from '@reddit/core/services/group/group.service';
-import { User } from '@reddit/core/models/user.model';
-import { Post } from '@reddit/core/models/post.model';
-import { Group } from '@reddit/core/models/group.model';
+import { PostService } from '@discussit/core/services/post/post.service';
+import { UserService } from '@discussit/core/services/user/user.service';
+import { GroupService } from '@discussit/core/services/group/group.service';
+import { User } from '@discussit/core/models/user.model';
+import { Post } from '@discussit/core/models/post.model';
+import { Group } from '@discussit/core/models/group.model';
 @Component({
   
   selector: 'app-group-post',

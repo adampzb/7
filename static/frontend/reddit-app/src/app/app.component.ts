@@ -4,7 +4,7 @@ import { UserService } from './core/services/user/user.service';
 import { StorageHandlerService } from './core/services/storage/storage-handler.service';
 import { CookieService } from 'ngx-cookie-service';
 import { User } from './core/models/user.model';
-import { environment } from '@reddit/env/environment';
+import { environment } from '@discussit/env/environment';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { DatePipe } from '@angular/common';

@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { UserService } from '@reddit/core/services/user/user.service';
-import { CommentService } from '@reddit/core/services/comment/comment.service';
+import { UserService } from '@discussit/core/services/user/user.service';
+import { CommentService } from '@discussit/core/services/comment/comment.service';
 import { MatDialog } from '@angular/material/dialog';
-import { User } from '@reddit/core/models/user.model';
-import { Comment } from '@reddit/core/models/comment.model';
-import { ConfirmationDialogComponent } from '@reddit/app/components/confirmation-dialog/confirmation-dialog.component';
+import { User } from '@discussit/core/models/user.model';
+import { Comment } from '@discussit/core/models/comment.model';
+import { ConfirmationDialogComponent } from '@discussit/app/components/confirmation-dialog/confirmation-dialog.component';
 
 
 @Component({

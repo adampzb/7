@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { User } from '@reddit/core/models/user.model';
+import { User } from '@discussit/core/models/user.model';
 
 
 @Component({

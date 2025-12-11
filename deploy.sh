@@ -54,4 +54,4 @@ python manage.py collectstatic --noinput
 
 echo "🎉 Deployment complete!"
 echo "🌐 Start the server with: python manage.py runserver"
-echo "🔗 Access the app at: http://localhost:8000/django_reddit/"
+echo "🔗 Access the app at: http://localhost:8000/"

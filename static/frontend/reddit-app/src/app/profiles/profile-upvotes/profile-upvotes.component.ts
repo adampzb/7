@@ -1,11 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserService } from '@reddit/core/services/user/user.service';
-import { CommentService } from '@reddit/core/services/comment/comment.service';
-import { GroupService } from '@reddit/core/services/group/group.service';
-import { User } from '@reddit/core/models/user.model';
-import { Group } from '@reddit/core/models/group.model';
-import { UserComment } from '@reddit/core/models/comment.model';
+import { UserService } from '@discussit/core/services/user/user.service';
+import { CommentService } from '@discussit/core/services/comment/comment.service';
+import { GroupService } from '@discussit/core/services/group/group.service';
+import { User } from '@discussit/core/models/user.model';
+import { Group } from '@discussit/core/models/group.model';
+import { UserComment } from '@discussit/core/models/comment.model';
 
 @Component({
   

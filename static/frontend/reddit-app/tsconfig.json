@@ -19,10 +19,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "paths": {
-      "@reddit/app/*": ["src/app/*"],
-      "@reddit/core/*": ["src/app/core/*"],
-      "@reddit/env/*": ["src/environments/*"],
-      "@reddit/assets/*": ["src/assets/*"]
+      "@discussit/app/*": ["src/app/*"],
+      "@discussit/core/*": ["src/app/core/*"],
+      "@discussit/env/*": ["src/environments/*"],
+      "@discussit/assets/*": ["src/assets/*"]
     }
   },
   "angularCompilerOptions": {

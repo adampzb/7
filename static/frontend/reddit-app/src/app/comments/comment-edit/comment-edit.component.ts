@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { User } from '@reddit/core/models/user.model';
-import { Comment } from '@reddit/core/models/comment.model';
-import { CommentService } from '@reddit/core/services/comment/comment.service';
+import { User } from '@discussit/core/models/user.model';
+import { Comment } from '@discussit/core/models/comment.model';
+import { CommentService } from '@discussit/core/services/comment/comment.service';
 
 
 @Component({

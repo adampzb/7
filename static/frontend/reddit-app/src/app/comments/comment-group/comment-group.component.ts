@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Comment } from '@reddit/core/models/comment.model';
-import { User } from '@reddit/core/models/user.model';
-import { CommentService } from '@reddit/core/services/comment/comment.service';
-import { UserService } from '@reddit/core/services/user/user.service';
-import { environment } from '@reddit/env/environment';
+import { Comment } from '@discussit/core/models/comment.model';
+import { User } from '@discussit/core/models/user.model';
+import { CommentService } from '@discussit/core/services/comment/comment.service';
+import { UserService } from '@discussit/core/services/user/user.service';
+import { environment } from '@discussit/env/environment';
 import { Router } from '@angular/router';
 
 @Component({

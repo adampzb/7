@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "reddit-app": {
+    "discussit-app": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -67,20 +67,20 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "reddit-app:build",
+            "browserTarget": "discussit-app:build",
             "baseHref": "/",
             "servePath": "/"
           },
           "configurations": {
             "production": {
-              "browserTarget": "reddit-app:build:production"
+              "browserTarget": "discussit-app:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "reddit-app:build"
+            "browserTarget": "discussit-app:build"
           }
         },
         "test": {
@@ -117,18 +117,18 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "reddit-app:serve"
+            "devServerTarget": "discussit-app:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "reddit-app:serve:production"
+              "devServerTarget": "discussit-app:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "reddit-app",
+  "defaultProject": "discussit-app",
   "cli": {
     "analytics": false
   }

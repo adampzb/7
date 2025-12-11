@@ -1,5 +1,5 @@
 {
-  "name": "reddit-app",
+  "name": "discussit-app",
   "version": "0.0.0",
   "engines": {
     "node": ">=22.21.0",

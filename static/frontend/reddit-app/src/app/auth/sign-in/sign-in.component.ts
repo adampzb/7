@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnInit, } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserService } from '@reddit/core/services/user/user.service';
+import { UserService } from '@discussit/core/services/user/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 

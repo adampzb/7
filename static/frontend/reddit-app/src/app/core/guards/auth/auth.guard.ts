@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { environment } from '@reddit/env/environment';
-import { UserService } from '@reddit/core/services/user/user.service';
-import { User } from '@reddit/core/models/user.model';
+import { environment } from '@discussit/env/environment';
+import { UserService } from '@discussit/core/services/user/user.service';
+import { User } from '@discussit/core/models/user.model';
 
 @Injectable({
   providedIn: 'root'

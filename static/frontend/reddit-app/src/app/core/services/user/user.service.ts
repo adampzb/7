@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { environment } from '@reddit/env/environment';
-import { User } from '@reddit/core/models/user.model';
+import { environment } from '@discussit/env/environment';
+import { User } from '@discussit/core/models/user.model';
 import { StorageHandlerService } from '../storage/storage-handler.service';
 
 @Injectable({

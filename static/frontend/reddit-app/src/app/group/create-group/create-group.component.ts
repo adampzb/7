@@ -1,10 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { User } from '@reddit/core/models/user.model';
+import { User } from '@discussit/core/models/user.model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from "rxjs/operators";
-import { GroupService } from '@reddit/core/services/group/group.service';
+import { GroupService } from '@discussit/core/services/group/group.service';
 
 @Component({
   

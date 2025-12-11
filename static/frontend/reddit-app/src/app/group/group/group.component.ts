@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserService } from '@reddit/core/services/user/user.service';
-import { GroupService } from '@reddit/core/services/group/group.service';
-import { Group } from '@reddit/core/models/group.model';
-import { User } from '@reddit/core/models/user.model';
+import { UserService } from '@discussit/core/services/user/user.service';
+import { GroupService } from '@discussit/core/services/group/group.service';
+import { Group } from '@discussit/core/models/group.model';
+import { User } from '@discussit/core/models/user.model';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmationDialogComponent } from '@reddit/app/components/confirmation-dialog/confirmation-dialog.component';
+import { ConfirmationDialogComponent } from '@discussit/app/components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   
