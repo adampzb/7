@@ -82,6 +82,10 @@ INSTALLED_APPS = [
     'guardian',
 
     'django_filters',
+    'crispy_forms',
+    'axes',
+    'django_ratelimit',
+    'activity_stream',
     'drf_yasg',
     'apps.core',
     'apps.tags',
