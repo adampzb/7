@@ -56,8 +56,15 @@ urlpatterns = [
         schema_view.with_ui("redoc", cache_timeout=0),
         name="redoc-docs",
     ),
-    # Angular app routes - catch all remaining routes at the end
+]
+
+# Add static and media file serving
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+# Angular app routes - must come after static/media files
+urlpatterns += [
     re_path(r'^django_reddit/.*$', AngularAppView.as_view(), name='angular_app'),
     # Serve Angular app at root for any unmatched routes (SPA routing)
     re_path(r'^.*$', AngularAppView.as_view(), name='angular_app_root'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
