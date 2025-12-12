@@ -64,13 +64,13 @@ A **modern full-stack discussion platform** built with **Django REST Framework**
 
 ## 📸 Screenshots
 
-![Django Reddit Sign In Page](screenshots/image01.png?raw=true "Django Reddit Sign In")
+![DiscussIt Sign In Page](screenshots/image01.png?raw=true "DiscussIt Sign In")
 
-![Django Reddit Feed](screenshots/image02.png?raw=true "Django Reddit Feed")
+![DiscussIt Feed](screenshots/image02.png?raw=true "DiscussIt Feed")
 
-![Django Reddit Group](screenshots/image03.png?raw=true "Django Reddit Group")
+![DiscussIt Group](screenshots/image03.png?raw=true "DiscussIt Group")
 
-![Django Reddit User Feed](screenshots/image04.png?raw=true "Django Reddit User Feed")
+![DiscussIt User Feed](screenshots/image04.png?raw=true "DiscussIt User Feed")
 
 <br>
 

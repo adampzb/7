@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "🚀 Starting Django Reddit deployment..."
+echo "🚀 Starting DiscussIt deployment..."
 
 # Check if in correct directory
 if [ ! -f "manage.py" ]; then
