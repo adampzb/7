@@ -46,6 +46,10 @@ urlpatterns = [
     path('', include('groups.urls')),
     path('', include('profiles.urls')),
     path('', include('reports.urls')),
+    path('', include('comments.urls')),
+    path('', include('bookmarks.urls')),
+    path('', include('followers.urls')),
+    path('api/v1/search/', include('haystack.urls')),
     path(
         "api/swagger/",
         schema_view.with_ui("swagger", cache_timeout=0),

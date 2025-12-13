@@ -1,5 +1,5 @@
 from django.urls import path, include
-from apps.comments.router import router
+from apps.bookmarks.router import router
 
 urlpatterns = [
     path('api/v1/', include(router.urls)),

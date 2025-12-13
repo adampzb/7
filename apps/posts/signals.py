@@ -40,7 +40,7 @@ def notify_comment_created(sender, instance, created, **kwargs):
             recipient=instance.post.author,
             verb='commented on',
             target=instance.post,
-            description=f'New comment: {instance.content[:50]}...'
+            description=f'New comment: {instance._comment[:50]}...'
         )
         
         # Notify post commenters (except the current user)
@@ -50,7 +50,7 @@ def notify_comment_created(sender, instance, created, **kwargs):
                 recipient=comment.user,
                 verb='also commented on',
                 target=instance.post,
-                description=f'New comment: {instance.content[:50]}...'
+                description=f'New comment: {instance._comment[:50]}...'
             )
 
 

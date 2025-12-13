@@ -83,10 +83,10 @@ INSTALLED_APPS = [
     'django_ratelimit',
     'actstream',
     'drf_yasg',
-    'notifications',  # User notifications
+    # 'notifications',  # User notifications - using custom system
     'haystack',  # Search functionality
-    'django_meta',  # SEO optimization
-    'social_share',  # Social sharing
+    'meta',  # SEO optimization
+    'django_social_share',  # Social sharing
     'apps.core',
     'apps.tags',
     'apps.posts',

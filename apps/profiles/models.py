@@ -22,6 +22,13 @@ class UserMetaInfo(TimeStampedModel):
     is_admin = models.BooleanField(default=False)
     is_banned = models.BooleanField(default=False)
     is_requesting_delete = models.BooleanField(default=False)
+    
+    # Notification preferences
+    notify_on_comment = models.BooleanField(default=True, verbose_name="Notify on comments")
+    notify_on_vote = models.BooleanField(default=True, verbose_name="Notify on votes")
+    notify_on_mention = models.BooleanField(default=True, verbose_name="Notify on mentions")
+    notify_on_follow = models.BooleanField(default=True, verbose_name="Notify on follows")
+    notify_email = models.BooleanField(default=False, verbose_name="Email notifications")
 
     class Meta:
         verbose_name = "User Meta Info"

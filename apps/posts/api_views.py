@@ -2,7 +2,7 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from django.contrib.auth import get_user_model
-# from notifications.models import Notification  # Temporarily disabled
+# from notifications.models import Notification  # Using custom system
 
 from .models import Post, PostVote
 from apps.comments.models import PostComment
@@ -81,19 +81,46 @@ class PostVoteCreateView(generics.CreateAPIView):
 @permission_classes([permissions.IsAuthenticated])
 def user_notifications(request):
     """
-    API endpoint for getting user notifications (temporarily simplified)
+    API endpoint for getting user notifications (using custom system)
     """
-    # Temporarily return empty list until notifications are fixed
-    return Response([])
+    from apps.core.notifications import Notification
+    
+    notifications = Notification.objects.filter(recipient=request.user).order_by('-created_at')[:20]
+    data = []
+    for notification in notifications:
+        data.append({
+            'id': notification.id,
+            'actor': notification.actor.username if notification.actor else None,
+            'verb': notification.verb,
+            'target': str(notification.target) if notification.target else None,
+            'timestamp': notification.created_at,
+            'unread': notification.unread,
+            'description': notification.description,
+            'type': notification.notification_type
+        })
+    return Response(data)
 
 
 @api_view(['POST'])
 @permission_classes([permissions.IsAuthenticated])
 def mark_notification_read(request, notification_id):
     """
-    API endpoint for marking notifications as read (temporarily disabled)
+    API endpoint for marking notifications as read (using custom system)
     """
-    return Response({'status': 'success'})
+    from apps.core.notifications import Notification
+    
+    try:
+        notification = Notification.objects.get(
+            id=notification_id,
+            recipient=request.user
+        )
+        notification.mark_as_read()
+        return Response({'status': 'success'})
+    except Notification.DoesNotExist:
+        return Response(
+            {'error': 'Notification not found'},
+            status=status.HTTP_404_NOT_FOUND
+        )
 
 
 @api_view(['GET'])

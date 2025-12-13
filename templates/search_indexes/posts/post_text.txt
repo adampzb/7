@@ -1,0 +1,9 @@
+{{ object.title }}
+{{ object.content }}
+{% for tag in object.tags.all %}
+{{ tag.name }}
+{% endfor %}
+{% if object.group %}
+{{ object.group.name }}
+{{ object.group.description }}
+{% endif %}
