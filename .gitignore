@@ -2,6 +2,26 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*$py.class
+
+# Python cache files
+.cache/
+*.cache
+
+# Django cache files
+*/cache/
+
+# Redis cache files
+dump.rdb
+
+# System cache files
+.fseventsd
+.Spotlight-V100
+.Trashes
+
+# Virtual environment cache
+venv/
+.env/
 
 # C extensions
 *.so
@@ -139,6 +159,62 @@ node_modules/
 # Angular build artifacts
 dist/
 */dist/
+
+# Angular cache and temporary files
+.angular/
+*/.angular/
+.angular/cache/
+*/.angular/cache/
+
+# JavaScript/TypeScript cache and build files
+*.js.map
+*.css.map
+*.tsbuildinfo
+
+# Webpack cache
+webpack-cache/
+*.webpack.js
+*.webpack.json
+
+# Frontend build cache
+build/
+*/build/
+
+# Node modules (already present but emphasizing)
+node_modules/
+*/node_modules/
+
+# Yarn cache
+yarn-cache/
+*.yarn-cache/
+
+# pnpm cache
+.pnpm-store/
+
+# Frontend test cache
+coverage/
+*/coverage/
+.nyc_output/
+*/.nyc_output/
+
+# Node.js cache
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Angular CLI cache
+.ng-cache/
+*/.ng-cache/
+
+# Babel cache
+babel-cache/
+*.babel.js
+
+# ESLint cache
+.eslintcache
+
+# Stylelint cache
+.stylelintcache
 
 # Package lock files (optional - can be included for reproducible builds)
 package-lock.json
