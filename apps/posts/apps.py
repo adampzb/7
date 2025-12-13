@@ -8,3 +8,13 @@ class PostsConfig(AppConfig):
     def ready(self):
         # Import and register signals
         import apps.posts.signals
+        
+        # Register models with actstream for activity tracking
+        from actstream import registry
+        from apps.posts.models import Post, PostVote
+        from apps.comments.models import PostComment, PostCommentVote
+        
+        registry.register(Post)
+        registry.register(PostComment)
+        registry.register(PostVote)
+        registry.register(PostCommentVote)

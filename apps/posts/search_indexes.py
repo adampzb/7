@@ -1,5 +1,6 @@
 from haystack import indexes
 from apps.posts.models import Post
+from apps.comments.models import PostComment
 
 
 class PostIndex(indexes.SearchIndex, indexes.Indexable):
@@ -35,7 +36,6 @@ class PostCommentIndex(indexes.SearchIndex, indexes.Indexable):
     created_at = indexes.DateTimeField(model_attr='created_at')
     
     def get_model(self):
-        from apps.posts.models import PostComment
         return PostComment
     
     def index_queryset(self, using=None):

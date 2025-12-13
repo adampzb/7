@@ -432,7 +432,8 @@ CORS_ALLOW_HEADERS = [
 
 CORS_ALLOW_METHODS = [
     'DELETE',
-    'GET',n    'OPTIONS',
+    'GET',
+    'OPTIONS',
     'PATCH',
     'POST',
     'PUT',
@@ -556,14 +557,18 @@ LOGGING = {
 
 # Django Debug Toolbar - only in development
 if DEBUG:
-    INSTALLED_APPS += ['debug_toolbar']
-    MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
-    
-    # Debug toolbar settings
-    DEBUG_TOOLBAR_CONFIG = {
-        'SHOW_TOOLBAR_CALLBACK': lambda request: True,
-        'INTERCEPT_REDIRECTS': False,
-    }
+    try:
+        import debug_toolbar
+        INSTALLED_APPS += ['debug_toolbar']
+        MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
+        
+        # Debug toolbar settings
+        DEBUG_TOOLBAR_CONFIG = {
+            'SHOW_TOOLBAR_CALLBACK': lambda request: True,
+            'INTERCEPT_REDIRECTS': False,
+        }
+    except ImportError:
+        pass  # Debug toolbar not installed, skip silently
 
 # Performance monitoring - can be enabled in production
 # Add 'django_performance_monitoring' to INSTALLED_APPS when needed
