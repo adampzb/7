@@ -83,6 +83,10 @@ INSTALLED_APPS = [
     'django_ratelimit',
     'actstream',
     'drf_yasg',
+    'notifications',  # User notifications
+    'haystack',  # Search functionality
+    'django_meta',  # SEO optimization
+    'social_share',  # Social sharing
     'apps.core',
     'apps.tags',
     'apps.posts',
@@ -99,12 +103,28 @@ INSTALLED_APPS = [
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ],
+}
+
+# JWT Authentication Configuration
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
 }
 
 # REST Auth settings
@@ -135,8 +155,20 @@ CONTENT_SECURITY_POLICY = {
     'REPORT_URI': None,  # Set to a URL to receive violation reports
 }
 
-# Additional CSP configuration (these go inside CONTENT_SECURITY_POLICY)
-# CSP_REPORT_ONLY = False  # Set to True for testing mode
+# Haystack Search Configuration
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
+    },
+}
+
+# Django Meta (SEO) Configuration
+META_SITE_PROTOCOL = 'https'
+META_SITE_DOMAIN = 'discussit.com'
+META_USE_OG_PROPERTIES = True
+META_USE_TWITTER_PROPERTIES = True
+META_USE_SCHEMAORG_PROPERTIES = True
 # CSP_REPORT_URI = None  # Set to a URL to receive violation reports
 
 MIDDLEWARE = [
