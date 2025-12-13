@@ -88,6 +88,12 @@ staticfiles/**/*backup*
 staticfiles/**/*-backup*
 staticfiles/**/redoc-old/
 
+# Angular/frontend build cache files with hashes
+staticfiles/*.[0-9a-f]{8,}.js
+staticfiles/*.[0-9a-f]{8,}.css
+staticfiles/**/*.[0-9a-f]{8,}.js
+staticfiles/**/*.[0-9a-f]{8,}.css
+
 # Flask stuff:
 instance/
 .webassets-cache
