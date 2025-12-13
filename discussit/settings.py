@@ -46,13 +46,8 @@ if ENVIRONMENT == 'production':
     if allowed_hosts_env:
         ALLOWED_HOSTS = [host.strip() for host in allowed_hosts_env.split(',') if host.strip()]
     else:
-        # Default production hosts
-        ALLOWED_HOSTS = [
-            'localhost', 
-            '127.0.0.1',
-            'localhost',
-            '127.0.0.1'
-        ]
+        # Default production hosts - only localhost for security
+        ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 else:
     # Development settings - Allow all hosts for flexibility
     ALLOWED_HOSTS = ['*']
