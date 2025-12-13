@@ -1,14 +1,15 @@
 from django.db import models
 from django.db.models import Sum
 from django.contrib.auth.models import User
+from django.urls import reverse
 
-from apps.core.models import TimeStampedModel
+from apps.core.models import TimeStampedModel, ActivityModel
 from apps.tags.models import Tag
 from django.core.validators import MinValueValidator, MaxValueValidator
 from apps.groups.models import Group
 import uuid
 
-class Post(TimeStampedModel):
+class Post(TimeStampedModel, ActivityModel):
     class STATUS(models.TextChoices):
         DRAFT = "DRAFT"
         PUBLIC = "PUBLIC"
@@ -45,6 +46,10 @@ class Post(TimeStampedModel):
 
     def __str__(self):
         return f"Post: {self.uuid} published by {self.author.username}"
+
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('post-detail', kwargs={'uuid': self.uuid})
 
     def _get_score(self):
         score = 0
