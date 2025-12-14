@@ -32,13 +32,23 @@ This deployment guide is tailored for our specific server configuration:
 - **Docker**: 28.2.2
 - **Docker Compose**: 1.29.2
 - **Nginx**: 1.24.0
+- **PostgreSQL**: 15 (installed and running)
 - **Git**: Latest stable version
 - **Pip**: 24.0
+
+**Database Configuration:**
+- **Database Name**: discussit
+- **Database User**: discussit_user
+- **Database Password**: discussit_password_2024
+- **Database Host**: localhost (or db for Docker)
+- **Database Port**: 5432
+- **Connection String**: postgres://discussit_user:discussit_password_2024@localhost:5432/discussit
 
 **Filesystem Layout:**
 - **Root**: 27GB ext4 filesystem on /dev/vda1
 - **Boot**: 881MB ext4 on /dev/vda16
 - **EFI**: 105MB vfat on /dev/vda15
+- **PostgreSQL Data**: /var/lib/postgresql/15/main/
 
 **Project Location:**
 - **Base Directory**: /root/7/
@@ -94,6 +104,29 @@ This guide is based on the exact server configuration we're currently using:
 - Domain name (optional but recommended)
 
 ## Server Setup
+
+### 0. Database Setup (Already Completed)
+
+Our PostgreSQL database has been set up with the following credentials:
+
+**Database Information:**
+- **Database Name**: `discussit`
+- **Username**: `discussit_user`
+- **Password**: `discussit_password_2024`
+- **Host**: `localhost`
+- **Port**: `5432`
+
+The database was created using these commands:
+```bash
+sudo -u postgres psql -c "CREATE DATABASE discussit;"
+sudo -u postgres psql -c "CREATE USER discussit_user WITH PASSWORD 'discussit_password_2024';"
+sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE discussit TO discussit_user;"
+```
+
+You can verify the database exists:
+```bash
+sudo -u postgres psql -l
+```
 
 ### 1. Connect to Your Remote Server
 
