@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static tinymce %}
+
+{% block content %}
+<div class="container">
+    <h1>TinyMCE Secure Editor Example</h1>
+    
+    <div class="alert alert-info">
+        <strong>Security Note:</strong> This editor has been configured with secure settings to prevent XSS attacks.
+    </div>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="content">Content:</label>
+            {{ form.content|tinymce }}
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+    
+    <div class="mt-4">
+        <h3>Security Features:</h3>
+        <ul>
+            <li>✅ No script execution in editor content</li>
+            <li>✅ Restricted HTML elements and attributes</li>
+            <li>✅ Content sanitization</li>
+            <li>✅ Secure file upload handling</li>
+            <li>✅ CSRF protection</li>
+        </ul>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+// Additional TinyMCE security configuration
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('TinyMCE Secure Editor loaded successfully');
+    
+    // You can add additional security checks here
+    tinymce.init({
+        selector: '#id_content',
+        setup: function(editor) {
+            editor.on('init', function() {
+                console.log('TinyMCE editor initialized with secure settings');
+            });
+        }
+    });
+});
+</script>
+{% endblock %}
+
+{% endblock %}

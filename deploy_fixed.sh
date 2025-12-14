@@ -34,7 +34,7 @@ pip install django-cors-headers==4.9.0 django-filter==25.2 django-crispy-forms==
 pip install django-csp==4.0 django-haystack==3.3.0 django-meta==2.5.0
 
 # Install permission and content dependencies
-pip install django-guardian==3.2.0 django-ckeditor-5==0.2.18
+pip install django-guardian==3.2.0
 
 # Install utility dependencies
 pip install django-axes==8.0.0 django-ratelimit==4.1.0 django-activity-stream==2.0.0

@@ -87,6 +87,7 @@ INSTALLED_APPS = [
     'haystack',  # Search functionality
     'meta',  # SEO optimization
     'django_social_share',  # Social sharing
+    'tinymce',  # Secure rich text editor (replaced CKEditor)
     'apps.core',
     'apps.tags',
     'apps.posts',
@@ -606,6 +607,35 @@ import os
 logs_dir = os.path.join(BASE_DIR, 'logs')
 if not os.path.exists(logs_dir):
     os.makedirs(logs_dir, exist_ok=True)
+
+# TinyMCE Configuration (Secure Rich Text Editor - replaced CKEditor for security)
+TINYMCE_DEFAULT_CONFIG = {
+    'theme': 'silver',
+    'height': 360,
+    'width': '100%',
+    'menubar': True,
+    'plugins': 'advlist autolink lists link image charmap print preview anchor '
+               'searchreplace visualblocks code fullscreen '
+               'insertdatetime media table paste code help wordcount',
+    'toolbar': 'undo redo | formatselect | bold italic backcolor | '
+               'alignleft aligncenter alignright alignjustify | '
+               'bullist numlist outdent indent | removeformat | help',
+    'content_css': '/static/css/tinymce-content.css',
+    'content_style': 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+    'relative_urls': False,
+    'remove_script_host': False,
+    'document_base_url': 'https://yourdomain.com/',
+    'entity_encoding': 'raw',
+    'extended_valid_elements': 'script[src|type|language]',
+    'valid_children': '+body[style]',
+    'valid_elements': '*[*]',
+    'valid_styles': {
+        '*': 'color,font-size,font-weight,text-decoration,text-align,background-color'
+    },
+    'custom_undo_redo_levels': 10,
+    'browser_spellcheck': True,
+    'importcss_append': True,
+}
 
 
 

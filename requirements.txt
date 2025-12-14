@@ -19,7 +19,7 @@ Django==5.2.8
 django-activity-stream==2.0.0
 django-allauth==65.13.1
 django-axes==8.0.0
-django-ckeditor-5==0.2.18
+django-tinymce==5.0.0
 django-cors-headers==4.9.0
 django-crispy-forms==2.5
 django-filter==25.2
