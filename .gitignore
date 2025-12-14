@@ -82,6 +82,7 @@ db.sqlite3
 db.sqlite3-journal
 
 # Django staticfiles cache and build artifacts
+staticfiles/
 staticfiles/**/*.map
 staticfiles/**/*old*/
 staticfiles/**/*backup*
