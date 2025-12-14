@@ -7,6 +7,7 @@ from apps.reports.models import PostReport, UserProfileReport
 
 @receiver(post_save, sender=PostReport)
 def post_reported_mail_hook(sender, instance, created, **kwargs):
+    """Send email notifications when a post report status changes"""
     if instance.status == 'INITIATED':
         try:
             recipient = settings.HOME_EMAIL
@@ -14,29 +15,41 @@ def post_reported_mail_hook(sender, instance, created, **kwargs):
             subject = "Post Report Initiated"
             template_name = "report_initiated_mail.html"
             context = {
-                "reporter_name" : reporter.first_name + " " + reporter.last_name,
+                "reporter_name": reporter.first_name + " " + reporter.last_name,
                 "reporter_username": reporter.username,
-                "object_link" : "https://localhost:8000/" + str(instance.post.uuid) + "/",
+                "object_link": "https://localhost:8000/" + str(instance.post.uuid) + "/",
                 "title": instance.post.title,
-                "url" : instance.url,
+                "url": instance.url,
             }
             mail(subject, template_name, recipient, context)
-        except:
+        except Exception as e:
+            # Log the error for debugging
+            print(f"Error sending post report initiated email: {e}")
             pass
-        else:
-            pass
-    if instance.status == 'VERIFIED' or instance.report == 'REJECTED':
+    
+    elif instance.status in ['VERIFIED', 'REJECTED']:
         try:
             recipient = instance.reporter.email
-            subject = "Report Progress"
-        except:
-            pass
-        else:
+            subject = "Report Progress Update"
+            template_name = "report_progress_mail.html"
+            context = {
+                "reporter_name": reporter.first_name + " " + reporter.last_name,
+                "reporter_username": reporter.username,
+                "object_link": "https://localhost:8000/" + str(instance.post.uuid) + "/",
+                "title": instance.post.title,
+                "status": instance.status,
+                "url": instance.url,
+            }
+            mail(subject, template_name, recipient, context)
+        except Exception as e:
+            # Log the error for debugging
+            print(f"Error sending post report progress email: {e}")
             pass
 
 
 @receiver(post_save, sender=UserProfileReport)
 def user_profile_reported_mail_hook(sender, instance, created, **kwargs):
+    """Send email notifications when a user profile report status changes"""
     if instance.status == 'INITIATED':
         try:
             recipient = settings.HOME_EMAIL
@@ -44,22 +57,33 @@ def user_profile_reported_mail_hook(sender, instance, created, **kwargs):
             subject = "User Profile Report Initiated"
             template_name = "report_initiated_mail.html"
             context = {
-                "reporter_name" : reporter.first_name + " " + reporter.last_name,
+                "reporter_name": reporter.first_name + " " + reporter.last_name,
                 "reporter_username": reporter.username,
-                "object_link" : "http://localhost:8000/" + str(instance.reported_user.username) + "/",
+                "object_link": "http://localhost:8000/" + str(instance.reported_user.username) + "/",
                 "title": instance.reported_user.username,
-                "url" : instance.url,
+                "url": instance.url,
             }
             mail(subject, template_name, recipient, context)
-        except:
+        except Exception as e:
+            # Log the error for debugging
+            print(f"Error sending user profile report initiated email: {e}")
             pass
-        else:
-            pass
-    if instance.status == 'VERIFIED' or instance.report == 'REJECTED':
+    
+    elif instance.status in ['VERIFIED', 'REJECTED']:
         try:
             recipient = instance.reporter.email
-            subject = "Report Progress"
-        except:
-            pass
-        else:
+            subject = "Report Progress Update"
+            template_name = "report_progress_mail.html"
+            context = {
+                "reporter_name": reporter.first_name + " " + reporter.last_name,
+                "reporter_username": reporter.username,
+                "object_link": "http://localhost:8000/" + str(instance.reported_user.username) + "/",
+                "title": instance.reported_user.username,
+                "status": instance.status,
+                "url": instance.url,
+            }
+            mail(subject, template_name, recipient, context)
+        except Exception as e:
+            # Log the error for debugging
+            print(f"Error sending user profile report progress email: {e}")
             pass
