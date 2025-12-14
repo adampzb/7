@@ -140,7 +140,7 @@ CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in csrf_origins.split(',') if 
 CONTENT_SECURITY_POLICY = {
     'DIRECTIVES': {
         'default-src': ["'self'"],
-        'script-src': ["'self'", "'unsafe-eval'", "https://fonts.googleapis.com", "https://fonts.gstatic.com"],
+        'script-src': ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://fonts.gstatic.com"],
         'style-src': ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://fonts.gstatic.com"],
         'img-src': ["'self'", "data:", "https://fonts.gstatic.com"],
         'font-src': ["'self'", "https://fonts.gstatic.com"],
@@ -214,7 +214,7 @@ if ENVIRONMENT == 'production':
     CACHES = {
         'default': {
             'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-            'LOCATION': 'redis://127.0.0.1:6379',
+            'LOCATION': 'redis://127.0.0.1:6380',
         }
     }
 else:
@@ -222,7 +222,7 @@ else:
     CACHES = {
         'default': {
             'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-            'LOCATION': 'redis://127.0.0.1:6379',
+            'LOCATION': 'redis://127.0.0.1:6380',
         }
     }
 
@@ -252,11 +252,15 @@ elif ENVIRONMENT == 'production':
         }
     }
 else:
-    # Development SQLite configuration
+    # Development PostgreSQL configuration - use localhost
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': get_env_variable('DB_NAME', 'discussit'),
+            'USER': get_env_variable('DB_USER', 'postgres'),
+            'PASSWORD': get_env_variable('DB_PASSWORD', 'postgres'),
+            'HOST': 'localhost',
+            'PORT': '5432',
         }
     }
 
@@ -584,13 +588,6 @@ PERFORMANCE_MONITORING = {
 
 # Security headers for production
 if not DEBUG:
-    # Content Security Policy
-    CSP_DEFAULT_SRC = ("'self'",)
-    CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://fonts.gstatic.com")
-    CSP_STYLE_SRC = ("'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://fonts.gstatic.com")
-    CSP_IMG_SRC = ("'self'", "data:", "https://fonts.gstatic.com")
-    CSP_FONT_SRC = ("'self'", "https://fonts.gstatic.com")
-    
     # Security middleware settings
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True

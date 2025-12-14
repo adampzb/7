@@ -43,14 +43,9 @@ ENV ENVIRONMENT production
 # Create necessary directories
 RUN mkdir -p /app/logs /app/staticfiles /app/media
 
-# Collect static files
-RUN python manage.py collectstatic --noinput
-
-# Run migrations
-RUN python manage.py migrate --noinput
-
-# Create admin user (optional - can be done via entrypoint)
-# RUN python manage.py createsuperuser --noinput --username admin --email admin@example.com
+# Copy entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 # Expose port
 EXPOSE 8000
@@ -59,5 +54,6 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=3s \
   CMD curl -f http://localhost:8000/health/ || exit 1
 
-# Command to run the application
+# Use entrypoint script
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["gunicorn", "--config", "gunicorn_config.py", "discussit.wsgi:application"]

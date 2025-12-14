@@ -4,6 +4,14 @@ services:
     build: .
     ports:
       - "8000:8000"
-    command: python manage.py runserver 0.0.0.0:8000
+    environment:
+      - ALLOWED_HOSTS=localhost,127.0.0.1,51.15.115.36
+      - DJANGO_SETTINGS_MODULE=discussit.settings_production
+      - ENVIRONMENT=production
+      - DEBUG=False
+      - SECRET_KEY=django-insecure-production-key-change-this-in-production-12345
+      - CORS_ALLOWED_ORIGINS=http://51.15.115.36,http://localhost:4200
+      - CSRF_TRUSTED_ORIGINS=http://51.15.115.36
+    command: gunicorn --config gunicorn_config.py discussit.wsgi:application
     volumes:
       - .:/usr/src/app

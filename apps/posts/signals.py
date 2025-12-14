@@ -1,10 +1,10 @@
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.contrib.auth import get_user_model
-from notifications.signals import notify
 
 from .models import Post, PostVote
 from apps.comments.models import PostComment
+from apps.core.notifications import create_notification
 
 User = get_user_model()
 
@@ -19,12 +19,13 @@ def notify_post_created(sender, instance, created, **kwargs):
         if instance.group:
             for member in instance.group.members.all():
                 if member != instance.author:
-                    notify.send(
-                        instance.author,
+                    create_notification(
                         recipient=member,
+                        actor=instance.author,
                         verb='created a post',
                         target=instance,
-                        description=f'New post in {instance.group.name}'
+                        description=f'New post in {instance.group.name}',
+                        notification_type='system'
                     )
 
 
@@ -35,22 +36,24 @@ def notify_comment_created(sender, instance, created, **kwargs):
     """
     if created:
         # Notify post author
-        notify.send(
-            instance.user,
+        create_notification(
             recipient=instance.post.author,
+            actor=instance.user,
             verb='commented on',
             target=instance.post,
-            description=f'New comment: {instance._comment[:50]}...'
+            description=f'New comment: {instance._comment[:50]}...',
+            notification_type='comment'
         )
         
         # Notify post commenters (except the current user)
         for comment in instance.post.comments.exclude(user=instance.user):
-            notify.send(
-                instance.user,
+            create_notification(
                 recipient=comment.user,
+                actor=instance.user,
                 verb='also commented on',
                 target=instance.post,
-                description=f'New comment: {instance._comment[:50]}...'
+                description=f'New comment: {instance._comment[:50]}...',
+                notification_type='comment'
             )
 
 
@@ -65,12 +68,13 @@ def notify_vote_created(sender, instance, created, **kwargs):
         else:  # Downvote
             verb = 'downvoted'
             
-        notify.send(
-            instance.user,
+        create_notification(
             recipient=instance.post.author,
+            actor=instance.user,
             verb=verb,
             target=instance.post,
-            description=f'Your post received a {verb}'
+            description=f'Your post received a {verb}',
+            notification_type='vote'
         )
 
 
@@ -82,10 +86,11 @@ def notify_post_deleted(sender, instance, **kwargs):
     if instance.group:
         for member in instance.group.members.all():
             if member != instance.author:
-                notify.send(
-                    instance.author,
+                create_notification(
                     recipient=member,
+                    actor=instance.author,
                     verb='deleted a post',
                     target=instance,
-                    description=f'Post removed from {instance.group.name}'
+                    description=f'Post removed from {instance.group.name}',
+                    notification_type='system'
                 )
