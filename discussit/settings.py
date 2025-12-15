@@ -292,17 +292,9 @@ LOGOUT_REDIRECT_URL = 'angular_app'
 ACCOUNT_LOGOUT_REDIRECT = 'angular_app'
 ACCOUNT_SESSION_REMEMBER = True
 # Updated allauth settings for django-allauth 65.x
-# Use the new SIGNUP_FIELDS format to avoid conflicts
-ACCOUNT_SIGNUP_FIELDS = {
-    'username': {'required': True},
-    'email': {'required': True},
-    'password1': {'required': True},
-    'password2': {'required': True},
-}
-# Login settings - allow both username and email
-ACCOUNT_AUTHENTICATION_METHOD = 'username_email'  # Allow login with username or email
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = True
+# Use the new format to avoid all warnings
+ACCOUNT_LOGIN_METHODS = ['username', 'email']  # Allow login with username or email
+ACCOUNT_SIGNUP_FIELDS = ['username', 'email', 'password1', 'password2']  # Required fields for signup
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_LOGIN_ATTEMPT_LIMIT = None
 ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = "/"
