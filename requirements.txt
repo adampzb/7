@@ -100,3 +100,4 @@ django-haystack==3.3.0
 django-meta==2.1.0
 django-social-share==1.3.0
 python-json-logger==2.0.7
+whoosh==2.7.4
