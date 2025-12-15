@@ -19,6 +19,16 @@ fi
 echo "Applying database migrations..."
 python manage.py migrate --noinput
 
+# Build Angular app if in development
+echo "Building Angular frontend..."
+if [ "$ENVIRONMENT" = "development" ]; then
+    cd /usr/src/app/static/frontend/app
+    npm install
+    ng build --configuration=development --base-href=/ --deploy-url=/ || echo "Angular build failed, using existing files"
+    cd /usr/src/app
+    cp -r static/frontend/app/dist/discussit-app/* staticfiles/ || echo "Failed to copy Angular files"
+fi
+
 # Collect static files
 echo "Collecting static files..."
 python manage.py collectstatic --noinput
