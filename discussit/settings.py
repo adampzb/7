@@ -219,22 +219,13 @@ TEMPLATES = [
 WSGI_APPLICATION = 'discussit.wsgi.application'
 
 # Cache configuration for django-ratelimit and django-axes
-# Use Redis in production, LocMemCache in development
-if ENVIRONMENT == 'production':
-    CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-            'LOCATION': 'redis://localhost:6380/1',
-        }
+# Use Redis in both production and development for consistency
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://redis:6379/1',  # Use Docker service name
     }
-else:
-    # Development: Use Redis cache for django_ratelimit compatibility
-    CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-            'LOCATION': 'redis://localhost:6380/1',
-        }
-    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -301,15 +292,17 @@ LOGOUT_REDIRECT_URL = 'angular_app'
 ACCOUNT_LOGOUT_REDIRECT = 'angular_app'
 ACCOUNT_SESSION_REMEMBER = True
 # Updated allauth settings for django-allauth 65.x
-# Fix for ACCOUNT_LOGIN_METHODS conflicts with ACCOUNT_SIGNUP_FIELDS warning
-# Allow both username and email for login, but require both in signup
-ACCOUNT_LOGIN_METHODS = ['username', 'email']  # Allow login with username or email
+# Use the new SIGNUP_FIELDS format to avoid conflicts
 ACCOUNT_SIGNUP_FIELDS = {
     'username': {'required': True},
     'email': {'required': True},
     'password1': {'required': True},
     'password2': {'required': True},
 }
+# Login settings - allow both username and email
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'  # Allow login with username or email
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_LOGIN_ATTEMPT_LIMIT = None
 ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = "/"
