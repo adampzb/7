@@ -287,3 +287,150 @@ The project contains approximately **1,484 files** organized across multiple Dja
 - **Deployment**: Docker, Gunicorn, Nginx
 - **Testing**: Django test framework, Angular testing utilities
 - **CI/CD**: GitHub Actions
+
+## 🚀 Deployment Instructions
+
+### Prerequisites
+
+- Docker and Docker Compose installed
+- Git installed
+- Basic knowledge of command line
+
+### Quick Start (Development)
+
+```bash
+# Clone the repository
+git clone https://github.com/adampzb/ds.git
+cd ds
+
+# Build and start the containers
+sudo docker-compose down -v && sudo docker-compose up -d --build
+
+# Wait for services to be ready (check with)
+sudo docker-compose logs -f
+
+# Access the application
+http://localhost:8000
+```
+
+### Production Deployment
+
+```bash
+# Clone the repository
+git clone https://github.com/adampzb/ds.git
+cd ds
+
+# Set up environment variables
+cp .env.example .env
+# Edit .env with your production settings
+
+# Build Angular frontend (optional - done automatically in development)
+./build_angular.sh
+
+# Build and start production containers
+sudo docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+
+# Run migrations
+sudo docker-compose exec web python manage.py migrate
+
+# Create admin user
+sudo docker-compose exec web python manage.py createsuperuser
+
+# Collect static files
+sudo docker-compose exec web python manage.py collectstatic --noinput
+```
+
+### Angular Development
+
+```bash
+# Navigate to Angular app
+cd static/frontend/app
+
+# Install dependencies
+npm install
+
+# Start development server (separate from Django)
+ng serve
+
+# Build for production
+ng build --configuration=production --base-href=/ --deploy-url=/
+```
+
+### Docker Services
+
+- **Web**: Django backend with Gunicorn (port 8000)
+- **PostgreSQL**: Database (port 5433)
+- **Redis**: Cache backend (port 6380)
+
+### Access URLs
+
+- **Application**: `http://localhost:8000` or `http://your-server-ip:8000`
+- **Admin**: `http://localhost:8000/admin/`
+- **API Docs**: `http://localhost:8000/api/swagger/`
+- **PostgreSQL**: `localhost:5433` (user: discussit_user, password: discussit_password_2024)
+- **Redis**: `localhost:6380`
+
+### Troubleshooting
+
+**Issue: Angular files not loading**
+- Run `./build_angular.sh` to rebuild frontend
+- Ensure symlinks exist: `ls -la *.js *.css index.html`
+
+**Issue: Database connection failed**
+- Check PostgreSQL is running: `sudo docker-compose logs db`
+- Wait for health check: `sudo docker-compose logs db | grep "healthy"`
+
+**Issue: MIME type errors**
+- Ensure Angular files are built and symlinked
+- Check file permissions: `ls -la staticfiles/`
+
+**Issue: CORS errors**
+- Add your domain to `CORS_ALLOWED_ORIGINS` in settings.py
+- Or set `CORS_ORIGIN_ALLOW_ALL = True` for development
+
+### Maintenance
+
+**Update dependencies**
+```bash
+# Python dependencies
+pip install --upgrade -r requirements.txt
+
+# JavaScript dependencies
+cd static/frontend/app
+npm update
+```
+
+**Run tests**
+```bash
+# Django tests
+sudo docker-compose exec web python manage.py test
+
+# Angular tests
+cd static/frontend/app
+ng test
+```
+
+### Environment Variables
+
+Create a `.env` file based on `.env.example`:
+
+```env
+# Django settings
+DEBUG=False
+SECRET_KEY=your-secret-key-here
+ALLOWED_HOSTS=yourdomain.com,localhost
+
+# Database
+DATABASE_URL=postgres://discussit_user:discussit_password_2024@db:5432/discussit
+
+# Security
+CSRF_TRUSTED_ORIGINS=http://yourdomain.com,http://localhost
+CORS_ALLOWED_ORIGINS=http://yourdomain.com,http://localhost
+```
+
+## 📚 Additional Documentation
+
+- **CI/CD Guide**: See `.github/CI_CD_README.md`
+- **Database Setup**: See `DATABASE_SETUP_GUIDE.md`
+- **Deployment Guide**: See `DEPLOYMENT_GUIDE.md`
+=======

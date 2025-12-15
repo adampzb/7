@@ -16,6 +16,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     net-tools \
     iproute2 \
+    nodejs \
+    npm \
     && rm -rf /var/lib/apt/lists/*
 
 # install dependencies

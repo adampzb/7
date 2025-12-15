@@ -66,6 +66,19 @@ urlpatterns = [
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
+# Serve Angular files from root URL
+from django.views.static import serve
+import os
+
+# Create URL patterns for Angular files at root
+angular_files = ['runtime.js', 'polyfills.js', 'main.js', 'styles.css', 'index.html']
+for file_name in angular_files:
+    file_path = os.path.join(settings.BASE_DIR, file_name)
+    if os.path.exists(file_path):
+        urlpatterns += [
+            re_path(rf'^{file_name}$', serve, {'path': file_name, 'document_root': settings.BASE_DIR}),
+        ]
+
 # Angular app routes - must come after static/media files
 urlpatterns += [
     # Serve Angular app at root for any unmatched routes (SPA routing)

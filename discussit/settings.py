@@ -219,22 +219,13 @@ TEMPLATES = [
 WSGI_APPLICATION = 'discussit.wsgi.application'
 
 # Cache configuration for django-ratelimit and django-axes
-# Use Redis in production, LocMemCache in development
-if ENVIRONMENT == 'production':
-    CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-            'LOCATION': 'redis://localhost:6380/1',
-        }
+# Use Redis in both production and development for consistency
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://redis:6379/1',  # Use Docker service name
     }
-else:
-    # Development: Use Redis cache for django_ratelimit compatibility
-    CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-            'LOCATION': 'redis://localhost:6380/1',
-        }
-    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -301,15 +292,9 @@ LOGOUT_REDIRECT_URL = 'angular_app'
 ACCOUNT_LOGOUT_REDIRECT = 'angular_app'
 ACCOUNT_SESSION_REMEMBER = True
 # Updated allauth settings for django-allauth 65.x
-# Fix for ACCOUNT_LOGIN_METHODS conflicts with ACCOUNT_SIGNUP_FIELDS warning
-# Allow both username and email for login, but require both in signup
+# Use the new format to avoid all warnings
 ACCOUNT_LOGIN_METHODS = ['username', 'email']  # Allow login with username or email
-ACCOUNT_SIGNUP_FIELDS = {
-    'username': {'required': True},
-    'email': {'required': True},
-    'password1': {'required': True},
-    'password2': {'required': True},
-}
+ACCOUNT_SIGNUP_FIELDS = ['username', 'email', 'password1', 'password2']  # Required fields for signup
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_LOGIN_ATTEMPT_LIMIT = None
 ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = "/"
@@ -598,20 +583,29 @@ PERFORMANCE_MONITORING = {
 # PRODUCTION READINESS CONFIGURATION
 # ============================================================================
 
-# Security headers for production
+# Security headers configuration
+# For development with remote access, we need to be less strict
 if not DEBUG:
-    # Security middleware settings for production
+    # Production security settings
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
-    SECURE_HSTS_SECONDS = 31536000  # 1 year - uncommented for production security
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
-    SECURE_SSL_REDIRECT = True  # Enable HTTPS redirect in production
+    SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_HTTPONLY = True
     CSRF_COOKIE_HTTPONLY = True
     X_FRAME_OPTIONS = 'DENY'
+else:
+    # Development settings - allow remote testing over HTTP
+    # Disable strict security headers that require HTTPS
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+    # Allow framing for development tools
+    X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 # Create logs directory if it doesn't exist
 import os
