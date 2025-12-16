@@ -15,10 +15,10 @@ echo "🔨 Building Angular app for production..."
 ng build --configuration=production --base-href=/ --deploy-url=/ || { echo "❌ Angular build failed"; exit 1; }
 
 echo "📁 Copying built files to staticfiles..."
-cp -r dist/discussit-app/* ../../staticfiles/ || { echo "❌ Failed to copy files"; exit 1; }
+cp -r dist/* ../../../staticfiles/ || { echo "❌ Failed to copy files"; exit 1; }
 
 echo "🔗 Creating symlinks for root-level files..."
-cd ../../..
+cd ../../../..
 ln -sf staticfiles/runtime.js runtime.js
 ln -sf staticfiles/polyfills.js polyfills.js
 ln -sf staticfiles/main.js main.js
