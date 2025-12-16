@@ -428,6 +428,117 @@ CSRF_TRUSTED_ORIGINS=http://yourdomain.com,http://localhost
 CORS_ALLOWED_ORIGINS=http://yourdomain.com,http://localhost
 ```
 
+## 🚀 Build and Deployment Instructions
+
+### 🧹 Complete Clean Build (Recommended for Fresh Start)
+
+```bash
+# Clean ALL old builds and cache
+cd /root/7
+echo "🧹 Cleaning ALL old builds and cache..."
+rm -rf staticfiles/
+rm -rf index.html main.js polyfills.js runtime.js styles.css
+rm -rf static/frontend/app/dist/
+rm -rf static/frontend/app/node_modules/
+rm -rf static/frontend/app/.angular/
+rm -f static/frontend/app/package-lock.json
+rm -rf whoosh_index/
+find . -name "*.pyc" -delete
+find . -name "__pycache__" -type d -exec rm -rf {} +
+rm -rf *.sqlite3
+echo "✅ Complete cleanup finished!"
+```
+
+### 🚀 Frontend Build (Angular)
+
+```bash
+# Install npm dependencies and build Angular app
+cd static/frontend/app
+npm install
+ng build --configuration=production --base-href=/ --deploy-url=/
+
+# Copy built files to staticfiles and create symlinks
+cp -r dist/* ../../staticfiles/
+cd ../../..
+ln -sf staticfiles/runtime.js runtime.js
+ln -sf staticfiles/polyfills.js polyfills.js
+ln -sf staticfiles/main.js main.js
+ln -sf staticfiles/styles.css styles.css
+ln -sf staticfiles/index.html index.html
+echo "✅ Frontend build completed!"
+```
+
+### 🐍 Backend Setup (Django)
+
+```bash
+# Install Python dependencies
+pip install -r requirements.txt
+
+# Run migrations
+python manage.py migrate
+
+# Collect static files
+python manage.py collectstatic --noinput
+
+# Create superuser (optional)
+# python manage.py createsuperuser
+echo "✅ Backend setup completed!"
+```
+
+### 🐳 Docker Build and Deployment
+
+```bash
+# Build Docker images
+docker-compose build
+
+# Start containers
+docker-compose up -d
+
+# Check running containers
+docker-compose ps
+echo "✅ Docker deployment completed!"
+```
+
+### 🔍 Verification Commands
+
+```bash
+# Check frontend files
+ls -la staticfiles/
+ls -la | grep -E "(index\.html|main\.js|polyfills\.js|runtime\.js|styles\.css)"
+
+# Check backend
+python manage.py check
+
+# Check Docker containers
+docker-compose logs --tail=20
+
+# Test API
+curl -I http://localhost:8000/api/
+echo "✅ Verification complete!"
+```
+
+### 📋 Quick Reference Cheat Sheet
+
+**Clean Everything:**
+```bash
+rm -rf staticfiles/ index.html main.js polyfills.js runtime.js styles.css static/frontend/app/{dist,node_modules,.angular,package-lock.json} whoosh_index/ && find . -name "*.pyc" -delete && find . -name "__pycache__" -type d -exec rm -rf {} +
+```
+
+**Frontend Only:**
+```bash
+cd static/frontend/app && npm install && ng build --configuration=production --base-href=/ --deploy-url=/ && cp -r dist/* ../../staticfiles/ && cd ../../.. && ln -sf staticfiles/{runtime,polyfills,main,styles,index.html}.{js,css,html} ./
+```
+
+**Backend Only:**
+```bash
+pip install -r requirements.txt && python manage.py migrate && python manage.py collectstatic --noinput
+```
+
+**Docker Only:**
+```bash
+docker-compose build && docker-compose up -d
+```
+
 ## 📚 Additional Documentation
 
 - **CI/CD Guide**: See `.github/CI_CD_README.md`
