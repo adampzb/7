@@ -42,6 +42,10 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
+              "allowedCommonJsDependencies": [
+                "quill",
+                "quill-delta"
+              ],
               "budgets": [
                 {
                   "type": "initial",
