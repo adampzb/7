@@ -21,20 +21,7 @@ import { Group } from '@discussit/core/models/group.model';
   styleUrls: ['./create-post.component.scss']
 })
 export class CreatePostComponent implements OnInit {
-  public quillConfig = {
-    toolbar: [
-      ['bold', 'italic', 'underline', 'strike'],
-      ['blockquote', 'code-block'],
-      [{ 'header': 1 }, { 'header': 2 }],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      [{ 'script': 'sub'}, { 'script': 'super' }],
-      [{ 'indent': '-1'}, { 'indent': '+1' }],
-      ['link'],
-      ['clean']
-    ],
-    placeholder: 'Write your post content here...',
-    theme: 'snow'
-  };
+
 
   postForm: FormGroup;
   content: any;
@@ -75,14 +62,7 @@ export class CreatePostComponent implements OnInit {
     this.isLoading = false;
   }
 
-  public onEditorReady(editor: any) {
-    console.log('Quill editor is ready to use!', editor);
-  }
 
-  public onEditorChange(event: any) {
-    // Quill provides the content directly in the event
-    this.postForm.patchValue({ content: event.html });
-  }
 
   getAuthUser(): void {
     this.userService.userInitialized.subscribe(

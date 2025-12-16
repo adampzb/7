@@ -24,12 +24,10 @@
       <div class=""></div>
 
       <div class="editor-container width-100">
-        <quill-editor 
-          [modules]="quillConfig"
+        <app-tiptap-editor
           formControlName="content"
-          (onEditorCreated)="onEditorReady($event)"
-          (onContentChanged)="onEditorChange($event)">
-        </quill-editor>
+          placeholder="Write your post content here...">
+        </app-tiptap-editor>
       </div>
 
       <!-- <input type="file"  formControlName="cover" (change)="onFileSelected($event.target.files)" #fileUpload> -->

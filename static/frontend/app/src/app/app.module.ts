@@ -21,7 +21,7 @@ import { HttpXsrfInterceptor } from './auth.header.interceptor';
 
 // TimeSinceModule is not compatible with Angular 19 - will need to replace with custom pipe
 // import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
-import { QuillModule } from 'ngx-quill';
+import { TiptapEditorComponent } from './components/tiptap-editor/tiptap-editor.component';
 // FlexLayout is deprecated in Angular 19, using CSS Grid/Flexbox instead
 import { SafeContentPipe } from '@discussit/core/pipes/safe-content/safe-content.pipe';
 import { TimeSincePipe } from '@discussit/core/pipes/time-since/time-since.pipe';
@@ -100,6 +100,7 @@ import { GroupSearchComponent } from './group/group-search/group-search.componen
     ProfileUpvotesComponent,
     ProfileCommentsComponent,
     ProfileDownvotesComponent,
+    TiptapEditorComponent,
 
     GroupSearchComponent,
 
@@ -121,7 +122,7 @@ import { GroupSearchComponent } from './group/group-search/group-search.componen
     MaterialModule,
     // FroalaViewModule.forRoot(),
     // FroalaEditorModule.forRoot(),
-    QuillModule.forRoot(),
+    // QuillModule.forRoot(),
     AppRoutingModule,
   ],
   providers: [  CookieService,
