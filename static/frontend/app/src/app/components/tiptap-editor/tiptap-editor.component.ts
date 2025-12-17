@@ -33,7 +33,6 @@ import StarterKit from '@tiptap/starter-kit';
     }
     `
   ],
-  standalone: true,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
