@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, forwardRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, ViewChild, ElementRef, forwardRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Editor } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
@@ -7,7 +7,7 @@ import StarterKit from '@tiptap/starter-kit';
   selector: 'app-tiptap-editor',
   template: `
     <div class="tiptap-editor">
-      <div #editor class="editor-content"></div>
+      <div #editorElement class="editor-content"></div>
     </div>
   `,
   styles: [
@@ -41,12 +41,13 @@ import StarterKit from '@tiptap/starter-kit';
     }
   ]
 })
-export class TiptapEditorComponent implements ControlValueAccessor, OnInit {
+export class TiptapEditorComponent implements ControlValueAccessor, OnInit, OnDestroy {
   
+  @ViewChild('editorElement', { static: true }) editorElement!: ElementRef<HTMLElement>;
   @Input() placeholder: string = 'Write something amazing...';
   @Output() contentChange = new EventEmitter<string>();
   
-  private editor: Editor;
+  private editor: Editor | null = null;
   private _value: string = '';
   
   // ControlValueAccessor methods
@@ -58,8 +59,13 @@ export class TiptapEditorComponent implements ControlValueAccessor, OnInit {
   }
   
   private initializeEditor() {
+    if (!this.editorElement) {
+      console.error('Editor element not available');
+      return;
+    }
+    
     this.editor = new Editor({
-      element: document.querySelector('.editor-content') as HTMLElement,
+      element: this.editorElement.nativeElement,
       extensions: [
         StarterKit,
       ],
