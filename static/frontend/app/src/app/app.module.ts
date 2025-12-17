@@ -101,7 +101,6 @@ import { GroupSearchComponent } from './group/group-search/group-search.componen
     ProfileUpvotesComponent,
     ProfileCommentsComponent,
     ProfileDownvotesComponent,
-    TiptapEditorComponent,
 
     GroupSearchComponent,
 
