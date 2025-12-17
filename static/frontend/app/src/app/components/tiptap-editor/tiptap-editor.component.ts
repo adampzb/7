@@ -33,6 +33,7 @@ import StarterKit from '@tiptap/starter-kit';
     }
     `
   ],
+  standalone: true,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -83,7 +84,7 @@ export class TiptapEditorComponent implements ControlValueAccessor, OnInit {
   writeValue(value: string): void {
     this._value = value || '';
     if (this.editor) {
-      this.editor.commands.setContent(this._value, false);
+      this.editor.commands.setContent(this._value);
     }
   }
   
