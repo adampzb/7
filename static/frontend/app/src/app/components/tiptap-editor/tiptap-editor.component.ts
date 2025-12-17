@@ -39,7 +39,8 @@ import StarterKit from '@tiptap/starter-kit';
       useExisting: forwardRef(() => TiptapEditorComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: false
 })
 export class TiptapEditorComponent implements ControlValueAccessor, OnInit, OnDestroy {
   
