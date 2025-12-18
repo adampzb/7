@@ -38,7 +38,8 @@
 - **File Storage**: Whitenoise + Media handling
 
 ### Frontend
-- **Framework**: Angular
+- **Framework**: Angular 21
+- **Runtime**: Node.js 25
 - **Styling**: Custom CSS with responsive design
 - **State Management**: Angular services
 - **Routing**: Angular Router with SPA support
@@ -54,7 +55,7 @@
 Before you begin, ensure you have the following installed:
 
 - **Python**: 3.8+
-- **Node.js**: 14+ (for Angular frontend)
+- **Node.js**: 25+ (for Angular 21 frontend)
 - **Docker**: 20.10+ (optional, for containerized deployment)
 - **Docker Compose**: 1.29+ (optional)
 - **PostgreSQL**: 15+ (or use Docker)
@@ -238,8 +239,8 @@ source venv/bin/activate
 # Install Python dependencies
 pip install -r requirements.txt
 
-# Install Node.js for Angular (if needed)
-curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+# Install Node.js 25 for Angular 21 (if needed)
+curl -fsSL https://deb.nodesource.com/setup_25.x | sudo -E bash -
 sudo apt install -y nodejs
 ```
 
@@ -554,5 +555,5 @@ Future enhancements planned:
 **DiscussIt** - Where conversations happen! 💬
 
 [![Django](https://img.shields.io/badge/Django-5.2.8-green.svg)](https://www.djangoproject.com/)
-[![Angular](https://img.shields.io/badge/Angular-16+-red.svg)](https://angular.io/)
+[![Angular](https://img.shields.io/badge/Angular-21-red.svg)](https://angular.io/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
