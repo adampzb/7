@@ -54,14 +54,54 @@ source venv/bin/activate || error_exit "Failed to activate virtual environment"
 echo "📦 Installing Python dependencies..."
 pip install -r requirements.txt || error_exit "Failed to install Python dependencies"
 
-# Install Node.js dependencies (if package.json exists)
-if [ -f "package.json" ]; then
-    echo "📦 Installing Node.js dependencies..."
-    npm install || error_exit "Failed to install Node.js dependencies"
+# Check for Angular frontend and build it
+ANGULAR_DIR="staticfiles/frontend/app"
+if [ -d "$ANGULAR_DIR" ] && [ -f "$ANGULAR_DIR/package.json" ]; then
+    echo "📦 Found Angular frontend in: $ANGULAR_DIR"
     
-    # Build Angular frontend
+    # Check Node.js and npm versions
+    echo "🔍 Checking Node.js environment..."
+    node_version=$(node --version 2>/dev/null || echo "not installed")
+    npm_version=$(npm --version 2>/dev/null || echo "not installed")
+    echo "   Node.js: $node_version"
+    echo "   npm: $npm_version"
+    
+    # Check if versions meet requirements
+    if ! command_exists node || ! command_exists npm; then
+        error_exit "Node.js and npm are required for frontend build. Please install them first."
+    fi
+    
+    # Install Angular CLI globally if not installed
+    echo "📦 Installing Angular CLI..."
+    npm install -g @angular/cli@21.0.1 || error_exit "Failed to install Angular CLI"
+    
+    # Navigate to Angular directory and install dependencies
+    echo "📦 Installing Angular dependencies..."
+    cd "$ANGULAR_DIR" || error_exit "Failed to change to Angular directory"
+    npm install || error_exit "Failed to install Angular dependencies"
+    
+    # Build Angular frontend with detailed output
     echo "🔨 Building Angular frontend..."
-    npm run build || error_exit "Failed to build Angular frontend"
+    echo "   This may take a few minutes..."
+    npm run build 2>&1 | while read line; do
+        echo "   Build: $line"
+    done
+    
+    # Check if build was successful
+    if [ ! -d "dist" ]; then
+        error_exit "Angular build failed - no dist directory created"
+    fi
+    
+    echo "✅ Angular build completed successfully!"
+    
+    # Copy built files to static directory
+    echo "📁 Copying built files to static directory..."
+    rsync -a dist/../../static/ || error_exit "Failed to copy static files"
+    
+    # Return to project root
+    cd "$PROJECT_DIR" || error_exit "Failed to return to project directory"
+else
+    echo "ℹ️  No Angular frontend found in $ANGULAR_DIR - using pre-built files"
 fi
 
 # Run database migrations
