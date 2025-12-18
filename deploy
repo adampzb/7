@@ -102,20 +102,92 @@ if [ -f "discussit/settings.py" ]; then
         sed -i "s/ALLOWED_HOSTS.*/ALLOWED_HOSTS = ['*']/" discussit/settings.py
 fi
 
-# Start Docker services
-echo "🐳 Starting Docker services..."
-docker compose up -d || error_exit "Failed to start Docker services"
+# Check if we should use production setup
+read -p "🚀 Use production setup with Nginx and Gunicorn? (y/n) " use_production
+if [[ "$use_production" =~ ^[Yy]$ ]]; then
+    echo "🔧 Setting up production environment with Nginx and Gunicorn..."
+    
+    # Install system dependencies
+    echo "📦 Installing production dependencies..."
+    sudo apt update
+    sudo apt install -y nginx certbot python3-certbot-nginx -qq || echo "⚠️  Some packages may already be installed"
+    
+    # Set up Nginx configuration
+    echo "🌐 Configuring Nginx..."
+    sudo cp nginx/prod.conf /etc/nginx/sites-available/discussit
+    sudo ln -sf /etc/nginx/sites-available/discussit /etc/nginx/sites-enabled/
+    sudo rm -f /etc/nginx/sites-enabled/default
+    
+    # Test and start Nginx
+    echo "🔍 Testing Nginx configuration..."
+    sudo nginx -t && sudo systemctl restart nginx || error_exit "Nginx setup failed"
+    
+    # Set up Gunicorn systemd service
+    echo "🔫 Setting up Gunicorn service..."
+    sudo cat > /etc/systemd/system/discussit.service << EOF
+[Unit]
+Description=DiscussIt Gunicorn Server
+After=network.target
 
-# Configure firewall for external access
-echo "🔥 Configuring firewall for external access..."
-if command_exists ufw; then
-    sudo ufw allow 8000/tcp || echo "⚠️  Firewall rule may already exist"
-    sudo ufw reload || echo "⚠️  Firewall reload failed"
-elif command_exists firewall-cmd; then
-    sudo firewall-cmd --add-port=8000/tcp --permanent || echo "⚠️  Firewall rule may already exist"
-    sudo firewall-cmd --reload || echo "⚠️  Firewall reload failed"
+[Service]
+User=root
+Group=www-data
+WorkingDirectory=$PROJECT_DIR
+Environment="PATH=$PROJECT_DIR/venv/bin"
+ExecStart=$PROJECT_DIR/venv/bin/gunicorn --config $PROJECT_DIR/gunicorn_config.py discussit.wsgi:application
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+EOF
+    
+    # Enable and start Gunicorn
+    echo "🚀 Starting Gunicorn..."
+    sudo systemctl daemon-reload
+    sudo systemctl enable discussit
+    sudo systemctl start discussit
+    
+    # Configure firewall for production
+    echo "🔥 Configuring firewall for production access..."
+    if command_exists ufw; then
+        sudo ufw allow 'Nginx Full' || echo "⚠️  Firewall rule may already exist"
+        sudo ufw allow 80/tcp || echo "⚠️  Firewall rule may already exist"
+        sudo ufw allow 443/tcp || echo "⚠️  Firewall rule may already exist"
+        sudo ufw --force enable || echo "⚠️  Firewall may already be enabled"
+    elif command_exists firewall-cmd; then
+        sudo firewall-cmd --add-service=http --permanent
+        sudo firewall-cmd --add-service=https --permanent
+        sudo firewall-cmd --reload
+    else
+        echo "⚠️  No recognized firewall found. You may need to manually open ports 80 and 443."
+    fi
+    
+    # Set up SSL (if DNS is configured)
+    echo "🔒 Attempting SSL setup..."
+    if command_exists certbot; then
+        sudo certbot --nginx -d 51.15.115.36 --non-interactive --agree-tos -m admin@discussit.com || \
+            echo "⚠️  SSL setup failed. The site is still accessible via HTTP."
+    else
+        echo "⚠️  Certbot not installed. Install with: sudo apt install certbot python3-certbot-nginx"
+    fi
+    
+    echo "✅ Production setup completed!"
 else
-    echo "⚠️  No recognized firewall found. You may need to manually open port 8000."
+    # Use Docker setup (original behavior)
+    echo "🐳 Starting Docker services..."
+    docker compose up -d || error_exit "Failed to start Docker services"
+    
+    # Configure firewall for Docker access
+    echo "🔥 Configuring firewall for Docker access..."
+    if command_exists ufw; then
+        sudo ufw allow 8000/tcp || echo "⚠️  Firewall rule may already exist"
+        sudo ufw reload || echo "⚠️  Firewall reload failed"
+    elif command_exists firewall-cmd; then
+        sudo firewall-cmd --add-port=8000/tcp --permanent || echo "⚠️  Firewall rule may already exist"
+        sudo firewall-cmd --reload || echo "⚠️  Firewall reload failed"
+    else
+        echo "⚠️  No recognized firewall found. You may need to manually open port 8000."
+    fi
 fi
 
 # Wait for database to be ready
@@ -142,23 +214,48 @@ fi
 echo "🔍 Checking service status..."
 docker compose ps
 
-# Display deployment information
-echo "🎉 Deployment completed successfully!"
-echo ""
-echo "📊 Deployment Summary:"
-echo "- Python environment: Ready"
-echo "- Dependencies: Installed"
-echo "- Database: Migrated"
-echo "- Static files: Collected"
-echo "- Docker services: Running"
-echo ""
-echo "🌐 Application should be available at:"
-echo "- Local: http://localhost:8000"
-echo "- Docker: http://localhost:8000 (via docker compose)"
-echo ""
-echo "💡 Next steps:"
-echo "1. Access the admin panel at /admin"
-echo "2. Configure your domain and SSL if deploying to production"
-echo "3. Set up monitoring and backups"
+# Display deployment information based on setup type
+if [[ "$use_production" =~ ^[Yy]$ ]]; then
+    echo "🎉 Production Deployment completed successfully!"
+    echo ""
+    echo "📊 Deployment Summary:"
+    echo "- Python environment: Ready"
+    echo "- Dependencies: Installed"
+    echo "- Database: Migrated"
+    echo "- Static files: Collected"
+    echo "- Nginx: Configured and running"
+    echo "- Gunicorn: Configured and running"
+    echo "- Firewall: Configured for HTTP/HTTPS"
+    echo ""
+    echo "🌐 Application Access:"
+    echo "- HTTP: http://51.15.115.36"
+    echo "- HTTPS: https://51.15.115.36 (if SSL setup succeeded)"
+    echo "- Admin: http://51.15.115.36/admin/"
+    echo "- API Docs: http://51.15.115.36/api/swagger/"
+    echo ""
+    echo "💡 Management Commands:"
+    echo "- Restart services: sudo systemctl restart discussit nginx"
+    echo "- View logs: sudo journalctl -u discussit -f"
+    echo "- Check status: sudo systemctl status discussit"
+else
+    echo "🎉 Development Deployment completed successfully!"
+    echo ""
+    echo "📊 Deployment Summary:"
+    echo "- Python environment: Ready"
+    echo "- Dependencies: Installed"
+    echo "- Database: Migrated"
+    echo "- Static files: Collected"
+    echo "- Docker services: Running"
+    echo ""
+    echo "🌐 Application should be available at:"
+    echo "- Local: http://localhost:8000"
+    echo "- External: http://51.15.115.36:8000 (if firewall allows)"
+    echo ""
+    echo "💡 Next steps:"
+    echo "1. Access the admin panel at /admin"
+    echo "2. For production, consider using the production setup"
+    echo "3. Set up monitoring and backups"
+fi
+
 echo ""
 echo "📚 Documentation: See README.md for more information"
