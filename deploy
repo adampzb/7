@@ -127,8 +127,13 @@ if [ -f "commands.txt" ]; then
     echo "📋 Running additional setup commands..."
     while read -r cmd; do
         if [[ "$cmd" != "" && "$cmd" != "#"* && "$cmd" != "="* && "$cmd" != "USING"* && "$cmd" != "==="* ]]; then
-            echo "Running: $cmd"
-            eval "$cmd" || echo "⚠️  Command failed: $cmd"
+            # Skip docker run commands to avoid port conflicts with docker compose
+            if [[ "$cmd" != "docker run"* ]]; then
+                echo "Running: $cmd"
+                eval "$cmd" || echo "⚠️  Command failed: $cmd"
+            else
+                echo "⚠️  Skipping 'docker run' command to avoid port conflicts (using docker compose instead)"
+            fi
         fi
     done < commands.txt
 fi
