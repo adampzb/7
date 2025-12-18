@@ -19,8 +19,13 @@ command_exists() {
 
 # Check if running as root
 if [ "$EUID" -eq 0 ]; then
-    echo "⚠️  Please do not run this script as root. Use a regular user with sudo privileges."
-    exit 1
+    echo "⚠️  This script is running as root."
+    read -p "🔒 Are you sure you want to continue as root? (y/n) " continue_as_root
+    if [[ ! "$continue_as_root" =~ ^[Yy]$ ]]; then
+        echo "🛑 Deployment aborted. Please run as a regular user with sudo privileges."
+        exit 1
+    fi
+    echo "✅ Continuing as root user..."
 fi
 
 # Check for required tools
