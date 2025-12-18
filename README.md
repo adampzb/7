@@ -535,6 +535,55 @@ chmod +x deploy
 ./deploy
 ```
 
+## 🌍 External Access Configuration
+
+To access the application from external devices:
+
+### 1. Network Configuration
+Ensure your server's network allows incoming connections on port 8000.
+
+### 2. Firewall Setup
+The deployment script automatically configures the firewall for external access.
+
+### 3. Access Information
+After deployment, the application will be accessible at:
+- **Local Network**: `http://<server-local-ip>:8000`
+- **Public Internet**: `http://<server-public-ip>:8000` (if port forwarding is configured)
+
+### 4. Port Forwarding (if behind NAT)
+If your server is behind a router/NAT, configure port forwarding:
+- **External Port**: 8000
+- **Internal IP**: Your server's local IP
+- **Internal Port**: 8000
+- **Protocol**: TCP
+
+### 5. Testing External Access
+```bash
+# From another device on the same network
+curl http://<server-ip>:8000
+
+# From a remote device (if public access is configured)
+curl http://<public-ip>:8000
+```
+
+## 🔒 Security Considerations for External Access
+
+### Production Recommendations
+1. **Use HTTPS**: Configure SSL/TLS for encrypted connections
+2. **Restrict ALLOWED_HOSTS**: Replace `['*']` with specific domain names
+3. **Use a Reverse Proxy**: Nginx or Apache for better security and performance
+4. **Enable Firewall**: Only allow necessary ports
+5. **Regular Updates**: Keep dependencies up to date
+
+### Quick Security Setup
+```bash
+# Install and configure Nginx as reverse proxy
+sudo apt install nginx
+# Configure SSL with Let's Encrypt
+sudo apt install certbot python3-certbot-nginx
+sudo certbot --nginx -d your-domain.com
+```
+
 ## 🤝 Contributing
 
 We welcome contributions to DiscussIt! Here's how you can help:

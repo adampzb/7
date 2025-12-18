@@ -85,9 +85,32 @@ if [ -f ".env" ]; then
     export $(grep -v '^#' .env | xargs) || echo "⚠️  Some environment variables may not have been loaded"
 fi
 
+# Configure for external access
+echo "🌍 Configuring for external access..."
+
+# Update ALLOWED_HOSTS to include external access
+if [ -f "discussit/settings.py" ]; then
+    echo "Updating Django settings for external access..."
+    # Add external host configuration if not present
+    grep -q "ALLOWED_HOSTS.*\*" discussit/settings.py || \
+        sed -i "s/ALLOWED_HOSTS.*/ALLOWED_HOSTS = ['*']/" discussit/settings.py
+fi
+
 # Start Docker services
 echo "🐳 Starting Docker services..."
 docker compose up -d || error_exit "Failed to start Docker services"
+
+# Configure firewall for external access
+echo "🔥 Configuring firewall for external access..."
+if command_exists ufw; then
+    sudo ufw allow 8000/tcp || echo "⚠️  Firewall rule may already exist"
+    sudo ufw reload || echo "⚠️  Firewall reload failed"
+elif command_exists firewall-cmd; then
+    sudo firewall-cmd --add-port=8000/tcp --permanent || echo "⚠️  Firewall rule may already exist"
+    sudo firewall-cmd --reload || echo "⚠️  Firewall reload failed"
+else
+    echo "⚠️  No recognized firewall found. You may need to manually open port 8000."
+fi
 
 # Wait for database to be ready
 echo "⏳ Waiting for database to be ready..."
@@ -97,7 +120,7 @@ sleep 10
 if [ -f "commands.txt" ]; then
     echo "📋 Running additional setup commands..."
     while read -r cmd; do
-        if [[ "$cmd" != "" && "$cmd" != "#"* && "$cmd" != "="* && "$cmd" != "USING"* ]]; then
+        if [[ "$cmd" != "" && "$cmd" != "#"* && "$cmd" != "="* && "$cmd" != "USING"* && "$cmd" != "==="* ]]; then
             echo "Running: $cmd"
             eval "$cmd" || echo "⚠️  Command failed: $cmd"
         fi
