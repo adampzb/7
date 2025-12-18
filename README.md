@@ -535,6 +535,52 @@ chmod +x deploy
 ./deploy
 ```
 
+## 🔄 Clean Deployment Process
+
+For a completely fresh deployment:
+
+```bash
+# Clean up existing installation
+chmod +x cleanup.sh
+./cleanup.sh
+
+# Run fresh deployment
+./deploy
+```
+
+The `cleanup.sh` script performs a complete cleanup:
+- Stops all Docker services
+- Removes containers, networks, and images
+- Cleans Python virtual environment
+- Removes static and media files
+- Cleans up build artifacts
+- Prepares for fresh deployment
+
+## 🎯 Deployment Workflow
+
+### First Time Deployment
+```bash
+# Clone and deploy
+git clone https://github.com/adampzb/7.git discussit
+cd discussit
+chmod +x deploy
+./deploy
+```
+
+### Redeployment (Clean Start)
+```bash
+# Clean up and redeploy
+./cleanup.sh
+./deploy
+```
+
+### Update Existing Deployment
+```bash
+# Pull latest changes and redeploy
+git pull origin main
+./deploy
+```
+
 ## 🌍 External Access Configuration
 
 To access the application from external devices:
