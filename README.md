@@ -514,14 +514,25 @@ chmod +x deploy
 ./deploy
 ```
 
-The `deploy` script handles:
+The `deploy` script offers two deployment modes:
+
+#### Development Mode (Docker)
 - Python virtual environment setup
-- Dependency installation (Python and Node.js)
+- Dependency installation
 - Database migrations
 - Static file collection
 - Docker service startup
-- Environment configuration
-- Optional superuser creation
+- Accessible at: `http://51.15.115.36:8000`
+
+#### Production Mode (Nginx + Gunicorn)
+- Nginx reverse proxy configuration
+- Gunicorn WSGI server setup
+- Systemd service management
+- Firewall configuration for HTTP/HTTPS
+- SSL setup with Let's Encrypt
+- Accessible at: `http://51.15.115.36` and `https://51.15.115.36`
+
+The script will prompt you to choose between development and production setup.
 
 ## 🚀 Quick Start
 
