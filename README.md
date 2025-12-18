@@ -508,13 +508,13 @@ For a complete one-click deployment, use our provided script:
 
 ```bash
 # Make the script executable (first time only)
-chmod +x deploy_full.sh
+chmod +x deploy
 
 # Run the full deployment
-./deploy_full.sh
+./deploy
 ```
 
-The `deploy_full.sh` script handles:
+The `deploy` script handles:
 - Python virtual environment setup
 - Dependency installation (Python and Node.js)
 - Database migrations
@@ -531,8 +531,8 @@ git clone https://github.com/adampzb/7.git discussit
 cd discussit
 
 # Run full deployment
-chmod +x deploy_full.sh
-./deploy_full.sh
+chmod +x deploy
+./deploy
 ```
 
 ## 🤝 Contributing
