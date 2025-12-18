@@ -43,6 +43,52 @@
 - **Styling**: Custom CSS with responsive design
 - **State Management**: Angular services
 - **Routing**: Angular Router with SPA support
+- **Build Process**: Automated with detailed logging
+- **Dependencies**: Managed via npm
+
+### Frontend Build Details
+
+The deployment script now provides comprehensive frontend build information:
+
+- **Node.js Environment Check**: Verifies Node.js and npm versions
+- **Angular CLI Installation**: Automatically installs required Angular CLI version
+- **Dependency Installation**: Installs all npm packages
+- **Real-time Build Logging**: Shows detailed build progress
+- **Build Verification**: Checks for successful build completion
+- **Static File Copying**: Moves built files to correct location
+
+## 📦 Frontend Build Process
+
+The Angular 21 frontend build includes:
+
+```bash
+# The deployment script handles:
+1. Environment verification (Node.js 25+, npm)
+2. Angular CLI 21.0.1 installation
+3. Dependency installation (npm install)
+4. Production build (ng build)
+5. Static file copying to Django static directory
+6. Error handling and verification
+```
+
+### Frontend Build Output
+
+During deployment, you'll see detailed build output like:
+
+```
+📦 Found Angular frontend in: staticfiles/frontend/app
+🔍 Checking Node.js environment...
+   Node.js: v25.x.x
+   npm: 10.x.x
+📦 Installing Angular CLI...
+📦 Installing Angular dependencies...
+🔨 Building Angular frontend...
+   Build: - Generating browser application bundles (phase: building)...
+   Build: - Compiling TypeScript files...
+   Build: - Generating ES5 bundles...
+   Build: ✅ Build completed successfully!
+📁 Copying built files to static directory...
+```
 
 ### DevOps
 - **Containerization**: Docker
