@@ -502,6 +502,39 @@ python manage.py populate_posts
 python manage.py populate_report_types
 ```
 
+### Full Deployment Script
+
+For a complete one-click deployment, use our provided script:
+
+```bash
+# Make the script executable (first time only)
+chmod +x deploy_full.sh
+
+# Run the full deployment
+./deploy_full.sh
+```
+
+The `deploy_full.sh` script handles:
+- Python virtual environment setup
+- Dependency installation (Python and Node.js)
+- Database migrations
+- Static file collection
+- Docker service startup
+- Environment configuration
+- Optional superuser creation
+
+## 🚀 Quick Start
+
+```bash
+# Clone the repository
+git clone https://github.com/adampzb/7.git discussit
+cd discussit
+
+# Run full deployment
+chmod +x deploy_full.sh
+./deploy_full.sh
+```
+
 ## 🤝 Contributing
 
 We welcome contributions to DiscussIt! Here's how you can help:

@@ -1,0 +1,125 @@
+#!/bin/bash
+
+# DiscussIt Full Deployment Script
+# This script handles complete deployment including backend, frontend, and all necessary setup
+
+# Exit immediately if any command fails
+echo "🚀 Starting DiscussIt Full Deployment..."
+
+# Function to display error messages and exit
+error_exit() {
+    echo "❌ ERROR: $1" >&2
+    exit 1
+}
+
+# Function to check if a command exists
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+# Check if running as root
+if [ "$EUID" -eq 0 ]; then
+    echo "⚠️  Please do not run this script as root. Use a regular user with sudo privileges."
+    exit 1
+fi
+
+# Check for required tools
+echo "🔧 Checking for required tools..."
+for cmd in git python3 pip3 node npm docker docker-compose; do
+    if ! command_exists "$cmd"; then
+        error_exit "$cmd is not installed. Please install it first."
+    fi
+done
+
+# Set project directory
+PROJECT_DIR="/root/7"
+cd "$PROJECT_DIR" || error_exit "Failed to change to project directory: $PROJECT_DIR"
+
+# Create virtual environment if it doesn't exist
+echo "🐍 Setting up Python environment..."
+if [ ! -d "venv" ]; then
+    echo "Creating virtual environment..."
+    python3 -m venv venv || error_exit "Failed to create virtual environment"
+fi
+
+# Activate virtual environment
+source venv/bin/activate || error_exit "Failed to activate virtual environment"
+
+# Install Python dependencies
+echo "📦 Installing Python dependencies..."
+pip install -r requirements.txt || error_exit "Failed to install Python dependencies"
+
+# Install Node.js dependencies (if package.json exists)
+if [ -f "package.json" ]; then
+    echo "📦 Installing Node.js dependencies..."
+    npm install || error_exit "Failed to install Node.js dependencies"
+    
+    # Build Angular frontend
+    echo "🔨 Building Angular frontend..."
+    npm run build || error_exit "Failed to build Angular frontend"
+fi
+
+# Run database migrations
+echo "🗃️ Running database migrations..."
+python manage.py migrate || error_exit "Failed to run database migrations"
+
+# Create superuser (optional - can be skipped if user already exists)
+read -p "👤 Do you want to create a superuser? (y/n) " create_superuser
+if [[ "$create_superuser" =~ ^[Yy]$ ]]; then
+    echo "Creating superuser..."
+    python manage.py createsuperuser || echo "⚠️  Superuser creation failed or was skipped"
+fi
+
+# Collect static files
+echo "🎨 Collecting static files..."
+python manage.py collectstatic --noinput || error_exit "Failed to collect static files"
+
+# Set up environment variables from .env
+if [ -f ".env" ]; then
+    echo "🔑 Loading environment variables from .env..."
+    export $(grep -v '^#' .env | xargs) || echo "⚠️  Some environment variables may not have been loaded"
+fi
+
+# Start Docker services
+echo "🐳 Starting Docker services..."
+docker compose up -d || error_exit "Failed to start Docker services"
+
+# Wait for database to be ready
+echo "⏳ Waiting for database to be ready..."
+sleep 10
+
+# Run any additional setup commands
+if [ -f "commands.txt" ]; then
+    echo "📋 Running additional setup commands..."
+    while read -r cmd; do
+        if [[ "$cmd" != "" && "$cmd" != "#"* ]]; then
+            echo "Running: $cmd"
+            eval "$cmd" || echo "⚠️  Command failed: $cmd"
+        fi
+    done < commands.txt
+fi
+
+# Check if services are running
+echo "🔍 Checking service status..."
+docker compose ps
+
+# Display deployment information
+echo "🎉 Deployment completed successfully!"
+echo ""
+echo "📊 Deployment Summary:"
+echo "- Python environment: Ready"
+echo "- Dependencies: Installed"
+echo "- Database: Migrated"
+echo "- Static files: Collected"
+echo "- Docker services: Running"
+echo ""
+echo "🌐 Application should be available at:"
+echo "- Local: http://localhost:8000"
+echo "- Docker: http://localhost:8000 (via docker compose)"
+echo ""
+echo "💡 Next steps:"
+echo "1. Access the admin panel at /admin"
+echo "2. Configure your domain and SSL if deploying to production"
+echo "3. Set up monitoring and backups"
+echo ""
+echo "📚 Documentation: See README.md for more information"
