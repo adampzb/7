@@ -148,6 +148,276 @@ docker compose exec web python manage.py migrate
 docker compose exec web python manage.py createsuperuser
 ```
 
+## 🌐 Remote Server Deployment
+
+### Prerequisites for Remote Deployment
+
+Before deploying to a remote server, ensure you have:
+- **Server**: Ubuntu 22.04 LTS or similar Linux distribution
+- **Domain**: Pointed to your server's IP address
+- **SSH Access**: With sudo privileges
+- **Firewall**: Configured to allow HTTP/HTTPS traffic
+
+### Step-by-Step Remote Deployment Guide
+
+#### 1. Connect to Your Server
+
+```bash
+ssh username@your-server-ip
+sudo apt update && sudo apt upgrade -y
+```
+
+#### 2. Install Required Dependencies
+
+```bash
+# Install system dependencies
+sudo apt install -y python3-pip python3-dev libpq-dev postgresql postgresql-contrib redis-server nginx git curl
+
+# Install Docker (optional but recommended)
+sudo apt install -y docker.io docker-compose
+sudo systemctl enable docker
+sudo systemctl start docker
+sudo usermod -aG docker $USER
+```
+
+#### 3. Set Up PostgreSQL Database
+
+```bash
+# Switch to postgres user
+sudo -u postgres psql
+
+# Create database and user
+CREATE DATABASE discussit;
+CREATE USER discussit_user WITH PASSWORD 'secure_password_here';
+ALTER ROLE discussit_user SET client_encoding TO 'utf8';
+ALTER ROLE discussit_user SET default_transaction_isolation TO 'read committed';
+ALTER ROLE discussit_user SET timezone TO 'UTC';
+GRANT ALL PRIVILEGES ON DATABASE discussit TO discussit_user;
+\q
+```
+
+#### 4. Clone the Repository
+
+```bash
+# Clone the project
+git clone https://github.com/adampzb/7.git discussit
+cd discussit
+
+# Set up environment variables
+cp .env.example .env  # If .env.example exists
+nano .env  # Edit with your production settings
+```
+
+#### 5. Configure Environment for Production
+
+Edit your `.env` file with production settings:
+
+```env
+# Production settings
+ENVIRONMENT=production
+DEBUG=False
+SECRET_KEY=your_secure_secret_key_here
+ALLOWED_HOSTS=your-domain.com,www.your-domain.com
+
+# Database
+DATABASE_URL=postgres://discussit_user:secure_password_here@localhost:5432/discussit
+
+# Security
+SECURE_SSL_REDIRECT=True
+SESSION_COOKIE_SECURE=True
+CSRF_COOKIE_SECURE=True
+```
+
+#### 6. Set Up Virtual Environment and Dependencies
+
+```bash
+# Create virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# Install Python dependencies
+pip install -r requirements.txt
+
+# Install Node.js for Angular (if needed)
+curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+sudo apt install -y nodejs
+```
+
+#### 7. Configure Nginx as Reverse Proxy
+
+```bash
+# Create Nginx configuration
+sudo nano /etc/nginx/sites-available/discussit
+```
+
+Add the following configuration:
+
+```nginx
+server {
+    listen 80;
+    server_name your-domain.com www.your-domain.com;
+
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /static/ {
+        alias /root/7/static/;
+        expires 30d;
+    }
+
+    location /media/ {
+        alias /root/7/media/;
+        expires 30d;
+    }
+}
+```
+
+Enable the configuration:
+
+```bash
+sudo ln -s /etc/nginx/sites-available/discussit /etc/nginx/sites-enabled/
+sudo nginx -t  # Test configuration
+sudo systemctl restart nginx
+```
+
+#### 8. Set Up Gunicorn for Production
+
+```bash
+# Install Gunicorn
+pip install gunicorn
+
+# Test Gunicorn
+gunicorn --bind 0.0.0.0:8000 discussit.wsgi:application
+```
+
+Create a systemd service for Gunicorn:
+
+```bash
+sudo nano /etc/systemd/system/discussit.service
+```
+
+Add the following:
+
+```ini
+[Unit]
+Description=DiscussIt Gunicorn Server
+After=network.target
+
+[Service]
+User=your_username
+Group=www-data
+WorkingDirectory=/root/7
+Environment="PATH=/root/7/venv/bin"
+ExecStart=/root/7/venv/bin/gunicorn --access-logfile - --workers 3 --bind unix:/root/7/discussit.sock discussit.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Enable and start the service:
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl start discussit
+sudo systemctl enable discussit
+```
+
+#### 9. Set Up HTTPS with Let's Encrypt
+
+```bash
+# Install Certbot
+sudo apt install -y certbot python3-certbot-nginx
+
+# Obtain SSL certificate
+sudo certbot --nginx -d your-domain.com -d www.your-domain.com
+
+# Set up automatic renewal
+sudo certbot renew --dry-run
+```
+
+#### 10. Finalize Deployment
+
+```bash
+# Run database migrations
+python manage.py migrate
+
+# Create superuser
+python manage.py createsuperuser
+
+# Collect static files
+python manage.py collectstatic
+
+# Restart services
+sudo systemctl restart nginx
+sudo systemctl restart discussit
+```
+
+### Deployment Checklist
+
+- [ ] Server security updates applied
+- [ ] PostgreSQL database configured
+- [ ] Redis server running
+- [ ] Environment variables set for production
+- [ ] Virtual environment created
+- [ ] Dependencies installed
+- [ ] Nginx configured as reverse proxy
+- [ ] Gunicorn service created and running
+- [ ] HTTPS configured with Let's Encrypt
+- [ ] Database migrations applied
+- [ ] Static files collected
+- [ ] Superuser created
+- [ ] Firewall configured (ports 80, 443 open)
+
+### Monitoring and Maintenance
+
+```bash
+# Check service status
+sudo systemctl status discussit
+sudo systemctl status nginx
+sudo systemctl status postgresql
+sudo systemctl status redis
+
+# View logs
+journalctl -u discussit -f
+sudo tail -f /var/log/nginx/error.log
+
+# Update application
+cd /root/7
+git pull origin main
+source venv/bin/activate
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py collectstatic --noinput
+sudo systemctl restart discussit
+```
+
+### Troubleshooting
+
+**Common Issues and Solutions:**
+
+1. **502 Bad Gateway**: Check Gunicorn service and socket permissions
+2. **Database connection errors**: Verify PostgreSQL credentials in `.env`
+3. **Static files not loading**: Ensure `collectstatic` was run and Nginx has proper permissions
+4. **SSL issues**: Check Certbot configuration and renew certificates
+
+**Debugging Commands:**
+
+```bash
+# Test database connection
+psql -h localhost -U discussit_user -d discussit
+
+# Check open ports
+sudo netstat -tulnp | grep -E '8000|80|443'
+
+# Test Gunicorn manually
+gunicorn --bind 0.0.0.0:8000 discussit.wsgi:application
+```
+
 ## 📂 Project Structure
 
 ```
