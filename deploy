@@ -97,7 +97,7 @@ sleep 10
 if [ -f "commands.txt" ]; then
     echo "📋 Running additional setup commands..."
     while read -r cmd; do
-        if [[ "$cmd" != "" && "$cmd" != "#"* ]]; then
+        if [[ "$cmd" != "" && "$cmd" != "#"* && "$cmd" != "="* && "$cmd" != "USING"* ]]; then
             echo "Running: $cmd"
             eval "$cmd" || echo "⚠️  Command failed: $cmd"
         fi
