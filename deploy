@@ -82,7 +82,13 @@ python manage.py collectstatic --noinput || error_exit "Failed to collect static
 # Set up environment variables from .env
 if [ -f ".env" ]; then
     echo "🔑 Loading environment variables from .env..."
-    export $(grep -v '^#' .env | xargs) || echo "⚠️  Some environment variables may not have been loaded"
+    # Load environment variables safely, ignoring comments and invalid lines
+    while IFS= read -r line || [[ -n "$line" ]]; do
+        # Skip empty lines, comments, and lines without '='
+        if [[ "$line" =~ ^[^#]*=.*$ ]] && [[ ! "$line" =~ ^[[:space:]]*# ]]; then
+            export "$line" || echo "⚠️  Failed to export: $line"
+        fi
+    done < .env
 fi
 
 # Configure for external access
