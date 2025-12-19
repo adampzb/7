@@ -56,17 +56,35 @@ pip install -r requirements.txt || error_exit "Failed to install Python dependen
 
 # Check for Angular frontend and build it
 ANGULAR_DIR="static/frontend/app"
-if [ -d "$ANGULAR_DIR" ] && [ -f "$ANGULAR_DIR/package.json" ]; then
-    echo "📦 Found Angular frontend in: $ANGULAR_DIR"
+
+echo "🔍 Checking for Angular frontend..."
+echo "   Looking in: $ANGULAR_DIR"
+
+if [ ! -d "$ANGULAR_DIR" ]; then
+    echo "❌ Angular frontend directory not found: $ANGULAR_DIR"
+    echo "⚠️  WARNING: No Angular frontend will be built!"
+    echo "💡 If you need the Angular frontend, make sure the directory exists with source files."
+    ANGULAR_BUILD_SKIPPED=true
+elif [ ! -f "$ANGULAR_DIR/package.json" ]; then
+    echo "❌ Angular package.json not found in: $ANGULAR_DIR"
+    echo "⚠️  WARNING: Angular frontend cannot be built without package.json!"
+    echo "💡 Make sure this is a valid Angular project directory."
+    ANGULAR_BUILD_SKIPPED=true
+else
+    echo "✅ Angular frontend found in: $ANGULAR_DIR"
     
     # Check if Angular directory is empty (indicating build files might be missing)
     if [ -z "$(ls -A "$ANGULAR_DIR/src" 2>/dev/null)" ]; then
-        echo "⚠️  Angular source directory appears empty. Skipping frontend build."
+        echo "❌ Angular source directory is empty: $ANGULAR_DIR/src"
+        echo "⚠️  WARNING: No Angular source files found! Skipping frontend build."
         echo "💡 Make sure you have the Angular source files in: $ANGULAR_DIR/src"
+        echo "   Expected files: main.ts, app.component.ts, etc."
         ANGULAR_BUILD_SKIPPED=true
     else
+        echo "✅ Angular source files found in: $ANGULAR_DIR/src"
         ANGULAR_BUILD_SKIPPED=false
     fi
+fi
     
     # Only proceed with build if source files exist
     if [ "$ANGULAR_BUILD_SKIPPED" = true ]; then
@@ -96,9 +114,16 @@ if [ -d "$ANGULAR_DIR" ] && [ -f "$ANGULAR_DIR/package.json" ]; then
     # Build Angular frontend with detailed output
     echo "🔨 Building Angular frontend..."
     echo "   This may take a few minutes..."
+    echo "   Watching build progress..."
+    
+    # Start build with progress tracking
+    BUILD_START=$(date +%s)
     npm run build 2>&1 | while read line; do
-        echo "   Build: $line"
+        echo "   $line"
     done
+    
+    BUILD_END=$(date +%s)
+    BUILD_TIME=$((BUILD_END - BUILD_START))
     
     # Check if build was successful
     if [ ! -d "dist" ]; then
@@ -106,6 +131,18 @@ if [ -d "$ANGULAR_DIR" ] && [ -f "$ANGULAR_DIR/package.json" ]; then
     fi
     
     echo "✅ Angular build completed successfully!"
+    echo "🎉 Build Summary:"
+    echo "   - Build time: ${BUILD_TIME} seconds"
+    echo "   - Output directory: dist/"
+    echo "   - Build status: SUCCESS"
+    
+    # Show some build statistics
+    if [ -d "dist" ]; then
+        BUILD_SIZE=$(du -sh dist | cut -f1)
+        FILE_COUNT=$(find dist -type f | wc -l)
+        echo "   - Build size: ${BUILD_SIZE}"
+        echo "   - Files generated: ${FILE_COUNT}"
+    fi
     
     # Copy built files to static directory
     echo "📁 Copying built files to static directory..."
@@ -291,6 +328,11 @@ if [[ "$use_production" =~ ^[Yy]$ ]]; then
     echo "🎉 Production Deployment completed successfully!"
     echo ""
     echo "📊 Deployment Summary:"
+    if [ "$ANGULAR_BUILD_SKIPPED" = true ]; then
+        echo "- Frontend build: Skipped (no source files)"
+    else
+        echo "- Frontend build: Completed successfully"
+    fi
     echo "- Python environment: Ready"
     echo "- Dependencies: Installed"
     echo "- Database: Migrated"
@@ -313,6 +355,11 @@ else
     echo "🎉 Development Deployment completed successfully!"
     echo ""
     echo "📊 Deployment Summary:"
+    if [ "$ANGULAR_BUILD_SKIPPED" = true ]; then
+        echo "- Frontend build: Skipped (no source files)"
+    else
+        echo "- Frontend build: Completed successfully"
+    fi
     echo "- Python environment: Ready"
     echo "- Dependencies: Installed"
     echo "- Database: Migrated"
