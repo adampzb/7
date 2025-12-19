@@ -8,4 +8,4 @@ docker run --publish 8000:8000 discussit
 USING docker compose
 docker compose up
 docker compose exec web python manage.py migrate
-docker compose exec web <django_command_to_be_run>
+docker compose exec web python manage.py createsuperuser

@@ -252,13 +252,13 @@ else
     # Configure firewall for Docker access
     echo "🔥 Configuring firewall for Docker access..."
     if command_exists ufw; then
-        sudo ufw allow 8000/tcp || echo "⚠️  Firewall rule may already exist"
+        sudo ufw allow 8001/tcp || echo "⚠️  Firewall rule may already exist"
         sudo ufw reload || echo "⚠️  Firewall reload failed"
     elif command_exists firewall-cmd; then
-        sudo firewall-cmd --add-port=8000/tcp --permanent || echo "⚠️  Firewall rule may already exist"
+        sudo firewall-cmd --add-port=8001/tcp --permanent || echo "⚠️  Firewall rule may already exist"
         sudo firewall-cmd --reload || echo "⚠️  Firewall reload failed"
     else
-        echo "⚠️  No recognized firewall found. You may need to manually open port 8000."
+        echo "⚠️  No recognized firewall found. You may need to manually open port 8001."
     fi
 fi
 
@@ -320,8 +320,8 @@ else
     echo "- Docker services: Running"
     echo ""
     echo "🌐 Application should be available at:"
-    echo "- Local: http://localhost:8000"
-    echo "- External: http://51.15.115.36:8000 (if firewall allows)"
+    echo "- Local: http://localhost:8001"
+    echo "- External: http://51.15.115.36:8001 (if firewall allows)"
     echo ""
     echo "💡 Next steps:"
     echo "1. Access the admin panel at /admin"
