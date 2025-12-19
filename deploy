@@ -150,7 +150,6 @@ fi
     
     # Return to project root
     cd "$PROJECT_DIR" || error_exit "Failed to return to project directory"
-    fi
 else
     echo "ℹ️  No Angular frontend found in $ANGULAR_DIR - using pre-built files"
 fi
