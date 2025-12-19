@@ -60,17 +60,7 @@ ANGULAR_DIR="static/frontend/app"
 echo "🔍 Checking for Angular frontend..."
 echo "   Looking in: $ANGULAR_DIR"
 
-if [ ! -d "$ANGULAR_DIR" ]; then
-    echo "❌ Angular frontend directory not found: $ANGULAR_DIR"
-    echo "⚠️  WARNING: No Angular frontend will be built!"
-    echo "💡 If you need the Angular frontend, make sure the directory exists with source files."
-    ANGULAR_BUILD_SKIPPED=true
-elif [ ! -f "$ANGULAR_DIR/package.json" ]; then
-    echo "❌ Angular package.json not found in: $ANGULAR_DIR"
-    echo "⚠️  WARNING: Angular frontend cannot be built without package.json!"
-    echo "💡 Make sure this is a valid Angular project directory."
-    ANGULAR_BUILD_SKIPPED=true
-else
+if [ -d "$ANGULAR_DIR" ] && [ -f "$ANGULAR_DIR/package.json" ]; then
     echo "✅ Angular frontend found in: $ANGULAR_DIR"
     
     # Check if Angular directory is empty (indicating build files might be missing)
@@ -84,7 +74,6 @@ else
         echo "✅ Angular source files found in: $ANGULAR_DIR/src"
         ANGULAR_BUILD_SKIPPED=false
     fi
-fi
     
     # Only proceed with build if source files exist
     if [ "$ANGULAR_BUILD_SKIPPED" = true ]; then
@@ -150,8 +139,12 @@ fi
     
     # Return to project root
     cd "$PROJECT_DIR" || error_exit "Failed to return to project directory"
+    fi
 else
-    echo "ℹ️  No Angular frontend found in $ANGULAR_DIR - using pre-built files"
+    echo "❌ Angular frontend not found in $ANGULAR_DIR"
+    echo "⚠️  WARNING: No Angular frontend will be built!"
+    echo "💡 If you need the Angular frontend, make sure the directory exists with package.json."
+    ANGULAR_BUILD_SKIPPED=true
 fi
 
 # Run database migrations
