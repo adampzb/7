@@ -55,16 +55,29 @@ echo "📦 Installing Python dependencies..."
 pip install -r requirements.txt || error_exit "Failed to install Python dependencies"
 
 # Check for Angular frontend and build it
-ANGULAR_DIR="staticfiles/frontend/app"
+ANGULAR_DIR="static/frontend/app"
 if [ -d "$ANGULAR_DIR" ] && [ -f "$ANGULAR_DIR/package.json" ]; then
     echo "📦 Found Angular frontend in: $ANGULAR_DIR"
     
-    # Check Node.js and npm versions
-    echo "🔍 Checking Node.js environment..."
-    node_version=$(node --version 2>/dev/null || echo "not installed")
-    npm_version=$(npm --version 2>/dev/null || echo "not installed")
-    echo "   Node.js: $node_version"
-    echo "   npm: $npm_version"
+    # Check if Angular directory is empty (indicating build files might be missing)
+    if [ -z "$(ls -A "$ANGULAR_DIR/src" 2>/dev/null)" ]; then
+        echo "⚠️  Angular source directory appears empty. Skipping frontend build."
+        echo "💡 Make sure you have the Angular source files in: $ANGULAR_DIR/src"
+        ANGULAR_BUILD_SKIPPED=true
+    else
+        ANGULAR_BUILD_SKIPPED=false
+    fi
+    
+    # Only proceed with build if source files exist
+    if [ "$ANGULAR_BUILD_SKIPPED" = true ]; then
+        echo "🚫 Skipping Angular build due to missing source files"
+    else
+        # Check Node.js and npm versions
+        echo "🔍 Checking Node.js environment..."
+        node_version=$(node --version 2>/dev/null || echo "not installed")
+        npm_version=$(npm --version 2>/dev/null || echo "not installed")
+        echo "   Node.js: $node_version"
+        echo "   npm: $npm_version"
     
     # Check if versions meet requirements
     if ! command_exists node || ! command_exists npm; then
@@ -96,10 +109,11 @@ if [ -d "$ANGULAR_DIR" ] && [ -f "$ANGULAR_DIR/package.json" ]; then
     
     # Copy built files to static directory
     echo "📁 Copying built files to static directory..."
-    rsync -a dist/../../static/ || error_exit "Failed to copy static files"
+    rsync -a dist/ ../static/ || error_exit "Failed to copy static files"
     
     # Return to project root
     cd "$PROJECT_DIR" || error_exit "Failed to return to project directory"
+    fi
 else
     echo "ℹ️  No Angular frontend found in $ANGULAR_DIR - using pre-built files"
 fi
@@ -113,6 +127,24 @@ read -p "👤 Do you want to create a superuser? (y/n) " create_superuser
 if [[ "$create_superuser" =~ ^[Yy]$ ]]; then
     echo "Creating superuser..."
     python manage.py createsuperuser || echo "⚠️  Superuser creation failed or was skipped"
+fi
+
+# Validate required environment variables
+if [ -f ".env" ]; then
+    echo "🔑 Validating environment variables..."
+    source .env
+    
+    # Check for critical variables
+    if [ -z "$SECRET_KEY" ]; then
+        echo "⚠️  SECRET_KEY not found in .env, generating a new one..."
+        export SECRET_KEY=$(python -c "import secrets; print(secrets.token_urlsafe(50))")
+        echo "SECRET_KEY=$SECRET_KEY" >> .env
+    fi
+    
+    if [ -z "$DEBUG" ]; then
+        echo "ℹ️  DEBUG not set, defaulting to False for production"
+        export DEBUG=False
+    fi
 fi
 
 # Collect static files
@@ -139,7 +171,7 @@ if [ -f "discussit/settings.py" ]; then
     echo "Updating Django settings for external access..."
     # Add external host configuration if not present
     grep -q "ALLOWED_HOSTS.*\*" discussit/settings.py || \
-        sed -i "s/ALLOWED_HOSTS.*/ALLOWED_HOSTS = ['*']/" discussit/settings.py
+        sed -i "s/ALLOWED_HOSTS.*/ALLOWED_HOSTS = ['51.15.115.36', 'localhost', '127.0.0.1']/" discussit/settings.py
 fi
 
 # Check if we should use production setup

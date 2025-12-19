@@ -38,15 +38,33 @@ docker compose down || echo "⚠️  Docker services may not have been running"
 
 # Remove Docker containers
 echo "🗑️  Removing Docker containers..."
-docker rm -f 7-web-1 7-db-1 7-redis-1 2>/dev/null || echo "⚠️  Containers may not exist"
+docker rm -f $(docker ps -aq --filter "name=7-") 2>/dev/null || echo "⚠️  Containers may not exist"
 
 # Remove Docker networks
 echo "🌐 Removing Docker networks..."
-docker network rm 7_default 2>/dev/null || echo "⚠️  Network may not exist"
+docker network rm $(docker network ls -q --filter "name=7_") 2>/dev/null || echo "⚠️  Network may not exist"
 
 # Remove Docker images
 echo "🖼️  Removing Docker images..."
-docker rmi -f 7-web 7-db 2>/dev/null || echo "⚠️  Images may not exist"
+docker rmi -f $(docker images -q --filter "reference=7-") 2>/dev/null || echo "⚠️  Images may not exist"
+
+# Stop and remove production services (if they exist)
+echo "🔧 Stopping production services..."
+if systemctl is-active --quiet discussit 2>/dev/null; then
+    sudo systemctl stop discussit
+    sudo systemctl disable discussit
+    sudo rm -f /etc/systemd/system/discussit.service
+    sudo systemctl daemon-reload
+    echo "✅ Production services stopped and removed"
+else
+    echo "ℹ️  No production services found"
+fi
+
+# Clean up Nginx configuration
+echo "🌐 Cleaning Nginx configuration..."
+sudo rm -f /etc/nginx/sites-available/discussit
+sudo rm -f /etc/nginx/sites-enabled/discussit
+sudo systemctl reload nginx 2>/dev/null || echo "⚠️  Nginx may not be installed"
 
 # Clean up Docker system
 echo "🧼 Cleaning Docker system..."
@@ -70,6 +88,11 @@ find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null
 find . -name "*.pyc" -delete 2>/dev/null
 find . -name "*.pyo" -delete 2>/dev/null
 
+# Clean up Angular build artifacts
+echo "📦 Removing Angular build artifacts..."
+rm -rf static/frontend/app/dist/ 2>/dev/null || echo "⚠️  Angular build artifacts may not exist"
+rm -rf staticfiles/frontend/app/dist/ 2>/dev/null || echo "⚠️  Angular build artifacts may not exist"
+
 # Clean up Node.js artifacts
 echo "📦 Removing Node.js artifacts..."
 rm -rf node_modules/ 2>/dev/null || echo "⚠️  Node modules may not exist"
@@ -77,7 +100,19 @@ rm -f package-lock.json 2>/dev/null || echo "⚠️  Package lock file may not e
 
 # Clean up database files (if using SQLite)
 echo "🗃️  Removing database files..."
-rm -f db.sqlite3 2>/dev/null || echo "⚠️  SQLite database may not exist"
+if [ -f "db.sqlite3" ]; then
+    echo "⚠️  WARNING: About to delete SQLite database file!"
+    read -p "💾 Do you want to backup the database first? (y/n) " backup_db
+    if [[ "$backup_db" =~ ^[Yy]$ ]]; then
+        echo "💾 Creating database backup..."
+        cp db.sqlite3 db.sqlite3.backup.$(date +%Y%m%d_%H%M%S)
+        echo "✅ Database backed up as db.sqlite3.backup.*"
+    fi
+    rm -f db.sqlite3
+    echo "✅ SQLite database removed"
+else
+    echo "ℹ️  SQLite database may not exist"
+fi
 
 # Clean up logs
 echo "📜 Removing log files..."
@@ -91,16 +126,19 @@ rm -f *.tmp *.log *.bak 2>/dev/null
 echo "🎉 Cleanup completed successfully!"
 echo ""
 echo "📋 Cleanup Summary:"
+echo "- Production services: Stopped and removed"
+echo "- Nginx configuration: Cleaned"
 echo "- Docker services: Stopped and removed"
 echo "- Docker containers: Removed"
 echo "- Docker networks: Removed"
 echo "- Docker images: Removed"
 echo "- Virtual environment: Removed"
+echo "- Angular build artifacts: Cleaned"
 echo "- Static files: Cleaned"
 echo "- Media files: Cleaned"
 echo "- Python cache: Cleaned"
 echo "- Node.js artifacts: Cleaned"
-echo "- Database files: Cleaned"
+echo "- Database files: Cleaned (with backup option)"
 echo "- Log files: Cleaned"
 echo ""
 echo "💡 Next steps for fresh deployment:"

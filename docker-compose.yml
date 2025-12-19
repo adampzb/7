@@ -29,7 +29,8 @@ services:
     build: .
     ports:
       - "8000:8000"
-    network_mode: host
+    # Using bridge networking for proper port mapping
+    # Remove network_mode: host to allow external access
     environment:
       - ALLOWED_HOSTS=51.15.115.36,localhost,127.0.0.1,[::1],0.0.0.0
       - DJANGO_SETTINGS_MODULE=discussit.settings
