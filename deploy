@@ -30,7 +30,7 @@ fi
 
 # Check for required tools
 echo "🔧 Checking for required tools..."
-for cmd in git python3 pip3 node npm docker docker-compose; do
+for cmd in git python3 pip3 node npm; do
     if ! command_exists "$cmd"; then
         error_exit "$cmd is not installed. Please install it first."
     fi
@@ -203,8 +203,9 @@ if [ -f "discussit/settings.py" ]; then
         sed -i "s/ALLOWED_HOSTS.*/ALLOWED_HOSTS = ['51.15.115.36', 'localhost', '127.0.0.1']/" discussit/settings.py
 fi
 
-# Check if we should use production setup
-read -p "🚀 Use production setup with Nginx and Gunicorn? (y/n) " use_production
+# Use production setup with Nginx and Gunicorn (default behavior)
+use_production="y"
+echo "🚀 Using production setup with Nginx and Gunicorn..."
 if [[ "$use_production" =~ ^[Yy]$ ]]; then
     echo "🔧 Setting up production environment with Nginx and Gunicorn..."
     
@@ -273,23 +274,6 @@ EOF
     fi
     
     echo "✅ Production setup completed!"
-else
-    # Use Docker setup (original behavior)
-    echo "🐳 Starting Docker services..."
-    docker compose up -d || error_exit "Failed to start Docker services"
-    
-    # Configure firewall for Docker access
-    echo "🔥 Configuring firewall for Docker access..."
-    if command_exists ufw; then
-        sudo ufw allow 8001/tcp || echo "⚠️  Firewall rule may already exist"
-        sudo ufw reload || echo "⚠️  Firewall reload failed"
-    elif command_exists firewall-cmd; then
-        sudo firewall-cmd --add-port=8001/tcp --permanent || echo "⚠️  Firewall rule may already exist"
-        sudo firewall-cmd --reload || echo "⚠️  Firewall reload failed"
-    else
-        echo "⚠️  No recognized firewall found. You may need to manually open port 8001."
-    fi
-fi
 
 # Wait for database to be ready
 echo "⏳ Waiting for database to be ready..."
@@ -300,20 +284,15 @@ if [ -f "commands.txt" ]; then
     echo "📋 Running additional setup commands..."
     while read -r cmd; do
         if [[ "$cmd" != "" && "$cmd" != "#"* && "$cmd" != "="* && "$cmd" != "USING"* && "$cmd" != "==="* ]]; then
-            # Skip docker run commands to avoid port conflicts with docker compose
-            if [[ "$cmd" != "docker run"* ]]; then
-                echo "Running: $cmd"
-                eval "$cmd" || echo "⚠️  Command failed: $cmd"
-            else
-                echo "⚠️  Skipping 'docker run' command to avoid port conflicts (using docker compose instead)"
-            fi
+            echo "Running: $cmd"
+            eval "$cmd" || echo "⚠️  Command failed: $cmd"
         fi
     done < commands.txt
 fi
 
 # Check if services are running
 echo "🔍 Checking service status..."
-docker compose ps
+echo "🎉 Production services are running with Nginx and Gunicorn!"
 
 # Display deployment information based on setup type
 if [[ "$use_production" =~ ^[Yy]$ ]]; then
@@ -343,30 +322,15 @@ if [[ "$use_production" =~ ^[Yy]$ ]]; then
     echo "- Restart services: sudo systemctl restart discussit nginx"
     echo "- View logs: sudo journalctl -u discussit -f"
     echo "- Check status: sudo systemctl status discussit"
-else
-    echo "🎉 Development Deployment completed successfully!"
-    echo ""
-    echo "📊 Deployment Summary:"
-    if [ "$ANGULAR_BUILD_SKIPPED" = true ]; then
-        echo "- Frontend build: Skipped (no source files)"
-    else
-        echo "- Frontend build: Completed successfully"
-    fi
-    echo "- Python environment: Ready"
-    echo "- Dependencies: Installed"
-    echo "- Database: Migrated"
-    echo "- Static files: Collected"
-    echo "- Docker services: Running"
-    echo ""
-    echo "🌐 Application should be available at:"
-    echo "- Local: http://localhost:8001"
-    echo "- External: http://51.15.115.36:8001 (if firewall allows)"
+    echo "- Reload Nginx: sudo systemctl reload nginx"
+    echo "- Check Nginx status: sudo systemctl status nginx"
+    echo "- Renew SSL certificates: sudo certbot renew"
     echo ""
     echo "💡 Next steps:"
     echo "1. Access the admin panel at /admin"
-    echo "2. For production, consider using the production setup"
-    echo "3. Set up monitoring and backups"
-fi
+    echo "2. Set up monitoring and backups"
+    echo "3. Configure email settings for production"
+    echo "4. Set up regular database backups"
 
 echo ""
 echo "📚 Documentation: See README.md for more information"

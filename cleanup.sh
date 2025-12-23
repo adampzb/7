@@ -32,23 +32,7 @@ cd "$PROJECT_DIR" || error_exit "Failed to change to project directory: $PROJECT
 
 echo "📍 Working in: $PROJECT_DIR"
 
-# Stop Docker services
-echo "🐳 Stopping Docker services..."
-docker compose down || echo "⚠️  Docker services may not have been running"
-
-# Remove Docker containers
-echo "🗑️  Removing Docker containers..."
-docker rm -f $(docker ps -aq --filter "name=7-") 2>/dev/null || echo "⚠️  Containers may not exist"
-
-# Remove Docker networks
-echo "🌐 Removing Docker networks..."
-docker network rm $(docker network ls -q --filter "name=7_") 2>/dev/null || echo "⚠️  Network may not exist"
-
-# Remove Docker images
-echo "🖼️  Removing Docker images..."
-docker rmi -f $(docker images -q --filter "reference=7-") 2>/dev/null || echo "⚠️  Images may not exist"
-
-# Stop and remove production services (if they exist)
+# Stop production services
 echo "🔧 Stopping production services..."
 if systemctl is-active --quiet discussit 2>/dev/null; then
     sudo systemctl stop discussit
@@ -66,9 +50,7 @@ sudo rm -f /etc/nginx/sites-available/discussit
 sudo rm -f /etc/nginx/sites-enabled/discussit
 sudo systemctl reload nginx 2>/dev/null || echo "⚠️  Nginx may not be installed"
 
-# Clean up Docker system
-echo "🧼 Cleaning Docker system..."
-docker system prune -f || echo "⚠️  Docker system prune failed"
+
 
 # Remove Python virtual environment
 echo "🐍 Removing Python virtual environment..."
@@ -128,10 +110,6 @@ echo ""
 echo "📋 Cleanup Summary:"
 echo "- Production services: Stopped and removed"
 echo "- Nginx configuration: Cleaned"
-echo "- Docker services: Stopped and removed"
-echo "- Docker containers: Removed"
-echo "- Docker networks: Removed"
-echo "- Docker images: Removed"
 echo "- Virtual environment: Removed"
 echo "- Angular build artifacts: Cleaned"
 echo "- Static files: Cleaned"
