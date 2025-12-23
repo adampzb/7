@@ -82,14 +82,22 @@ db.sqlite3
 db.sqlite3-journal
 
 # Django staticfiles cache and build artifacts
-# Track frontend source code but not built files
-!staticfiles/frontend/app/
 staticfiles/
 staticfiles/**/*.map
 staticfiles/**/*old*/
 staticfiles/**/*backup*
 staticfiles/**/*-backup*
 staticfiles/**/redoc-old/
+staticfiles/**/node_modules/
+staticfiles/**/dist/
+staticfiles/**/.angular/
+
+# Frontend source code (tracked by git)
+!static/frontend/
+static/frontend/**/node_modules/
+static/frontend/**/dist/
+static/frontend/**/.angular/
+static/frontend/**/out-tsc/
 
 # Angular/frontend build cache files with hashes
 staticfiles/*.[0-9a-f]{8,}.js

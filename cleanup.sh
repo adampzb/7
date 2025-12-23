@@ -56,9 +56,9 @@ sudo systemctl reload nginx 2>/dev/null || echo "⚠️  Nginx may not be instal
 echo "🐍 Removing Python virtual environment..."
 rm -rf venv || echo "⚠️  Virtual environment may not exist"
 
-# Clean up static files
-echo "🎨 Removing static files..."
-rm -rf static/* || echo "⚠️  Static files may not exist"
+# Clean up staticfiles (build artifacts)
+echo "🎨 Removing staticfiles (build artifacts)..."
+rm -rf staticfiles/* || echo "⚠️  Staticfiles may not exist"
 
 # Clean up media files
 echo "📁 Removing media files..."
@@ -70,16 +70,14 @@ find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null
 find . -name "*.pyc" -delete 2>/dev/null
 find . -name "*.pyo" -delete 2>/dev/null
 
-# Clean up Angular build artifacts
-echo "📦 Removing Angular build artifacts..."
-rm -rf frontend/app/dist/ 2>/dev/null || echo "⚠️  Angular build artifacts may not exist"
+# Clean up Angular build artifacts (only from staticfiles, preserve source in static)
+echo "📦 Removing Angular build artifacts from staticfiles..."
 rm -rf staticfiles/frontend/app/dist/ 2>/dev/null || echo "⚠️  Angular build artifacts may not exist"
 
-# Clean up Node.js artifacts
-echo "📦 Removing Node.js artifacts..."
-rm -rf frontend/app/node_modules/ 2>/dev/null || echo "⚠️  Node modules may not exist"
+# Clean up Node.js artifacts (only from staticfiles, preserve source in static)
+echo "📦 Removing Node.js artifacts from staticfiles..."
 rm -rf staticfiles/frontend/app/node_modules/ 2>/dev/null || echo "⚠️  Node modules may not exist"
-rm -f frontend/app/package-lock.json 2>/dev/null || echo "⚠️  Package lock file may not exist"
+rm -f staticfiles/frontend/app/package-lock.json 2>/dev/null || echo "⚠️  Package lock file may not exist"
 
 # Clean up database files (SQLite and PostgreSQL)
 echo "🗃️  Removing database files..."
