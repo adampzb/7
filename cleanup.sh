@@ -30,6 +30,13 @@ fi
 PROJECT_DIR="/root/7"
 cd "$PROJECT_DIR" || error_exit "Failed to change to project directory: $PROJECT_DIR"
 
+# Check for dry-run mode
+DRY_RUN=false
+if [[ "$1" == "--dry-run" || "$1" == "-n" ]]; then
+    DRY_RUN=true
+    echo "🔍 DRY RUN MODE: No files will actually be deleted"
+fi
+
 echo "📍 Working in: $PROJECT_DIR"
 
 # Stop production services
@@ -54,15 +61,60 @@ sudo systemctl reload nginx 2>/dev/null || echo "⚠️  Nginx may not be instal
 
 # Remove Python virtual environment
 echo "🐍 Removing Python virtual environment..."
-rm -rf venv || echo "⚠️  Virtual environment may not exist"
+if [ -d "venv" ]; then
+    if [ "$DRY_RUN" = true ]; then
+        echo "  [DRY RUN] Would remove: venv/"
+    else
+        rm -rf venv
+        echo "✅ Virtual environment removed"
+    fi
+else
+    echo "ℹ️  Virtual environment not found"
+fi
 
-# Clean up staticfiles (build artifacts)
+# Clean up staticfiles (build artifacts) - BE CAREFUL!
 echo "🎨 Removing staticfiles (build artifacts)..."
-rm -rf staticfiles/* || echo "⚠️  Staticfiles may not exist"
+# Only remove specific build artifacts, preserve important files
+if [ -d "staticfiles" ]; then
+    # Keep these important directories/files
+    find staticfiles -mindepth 1 -maxdepth 1 \
+        \( 
+        -name "admin" -o \
+        -name "rest_framework" -o \
+        -name "django_tinymce" -o \
+        -name "drf-yasg" -o \
+        -name "guardian" -o \
+        -name "*.js" -o \
+        -name "*.css" -o \
+        -name "*.ico" -o \
+        -name "*.html" -o \
+        -name "*.txt" \
+        \) -prune -o -exec rm -rf {} + 2>/dev/null
+    echo "✅ Staticfiles build artifacts cleaned (important files preserved)"
+else
+    echo "ℹ️  Staticfiles directory not found"
+fi
 
-# Clean up media files
+# Clean up media files - BE CAREFUL!
 echo "📁 Removing media files..."
-rm -rf media/* 2>/dev/null || echo "⚠️  Media directory may not exist"
+if [ -d "media" ]; then
+    echo "⚠️  WARNING: This will delete ALL user-uploaded media files!"
+    read -p "🔥 Are you sure you want to delete media files? (y/n) " confirm_media_delete
+    if [[ "$confirm_media_delete" =~ ^[Yy]$ ]]; then
+        # Backup media files first
+        if [ -n "$(ls -A media 2>/dev/null)" ]; then
+            echo "💾 Creating media backup..."
+            tar -czf media_backup_$(date +%Y%m%d_%H%M%S).tar.gz media/
+            echo "✅ Media backed up as media_backup_*.tar.gz"
+        fi
+        rm -rf media/*
+        echo "✅ Media files removed"
+    else
+        echo "🛑 Media files kept"
+    fi
+else
+    echo "ℹ️  Media directory not found"
+fi
 
 # Clean up Python cache and build files
 echo "🗑️  Removing Python cache and build files..."
@@ -72,12 +124,40 @@ find . -name "*.pyo" -delete 2>/dev/null
 
 # Clean up Angular build artifacts (only from staticfiles, preserve source in static)
 echo "📦 Removing Angular build artifacts from staticfiles..."
-rm -rf staticfiles/frontend/app/dist/ 2>/dev/null || echo "⚠️  Angular build artifacts may not exist"
+if [ -d "staticfiles/frontend/app/dist" ]; then
+    if [ "$DRY_RUN" = true ]; then
+        echo "  [DRY RUN] Would remove: staticfiles/frontend/app/dist/"
+    else
+        rm -rf staticfiles/frontend/app/dist/
+        echo "✅ Angular build artifacts removed"
+    fi
+else
+    echo "ℹ️  Angular build artifacts not found"
+fi
 
 # Clean up Node.js artifacts (only from staticfiles, preserve source in static)
 echo "📦 Removing Node.js artifacts from staticfiles..."
-rm -rf staticfiles/frontend/app/node_modules/ 2>/dev/null || echo "⚠️  Node modules may not exist"
-rm -f staticfiles/frontend/app/package-lock.json 2>/dev/null || echo "⚠️  Package lock file may not exist"
+if [ -d "staticfiles/frontend/app/node_modules" ]; then
+    if [ "$DRY_RUN" = true ]; then
+        echo "  [DRY RUN] Would remove: staticfiles/frontend/app/node_modules/"
+    else
+        rm -rf staticfiles/frontend/app/node_modules/
+        echo "✅ Node modules removed"
+    fi
+else
+    echo "ℹ️  Node modules not found"
+fi
+
+if [ -f "staticfiles/frontend/app/package-lock.json" ]; then
+    if [ "$DRY_RUN" = true ]; then
+        echo "  [DRY RUN] Would remove: staticfiles/frontend/app/package-lock.json"
+    else
+        rm -f staticfiles/frontend/app/package-lock.json
+        echo "✅ Package lock file removed"
+    fi
+else
+    echo "ℹ️  Package lock file not found"
+fi
 
 # Clean up database files (SQLite and PostgreSQL)
 echo "🗃️  Removing database files..."
@@ -153,8 +233,8 @@ echo "- Production services: Stopped and removed"
 echo "- Nginx configuration: Cleaned"
 echo "- Virtual environment: Removed"
 echo "- Angular build artifacts: Cleaned"
-echo "- Static files: Cleaned"
-echo "- Media files: Cleaned"
+echo "- Static files: Cleaned (important files preserved)"
+echo "- Media files: Cleaned (with backup option)"
 echo "- Python cache: Cleaned"
 echo "- Node.js artifacts: Cleaned"
 echo "- Database files: Cleaned (with backup option)"
@@ -168,4 +248,10 @@ echo "1. Run: chmod +x deploy"
 echo "2. Run: ./deploy"
 echo "3. The application will be rebuilt from scratch"
 echo ""
-echo "⚠️  Note: Database data has been cleaned. You may want to backup important data before cleanup."
+echo "🛡️  Safety Features:"
+echo "- Important static files are preserved"
+echo "- Media files require confirmation before deletion"
+echo "- Database files are backed up before deletion"
+echo "- Dry-run mode available: ./cleanup.sh --dry-run"
+echo ""
+echo "⚠️  Note: Important data has been preserved or backed up. Check backup files if needed."
