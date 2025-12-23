@@ -164,17 +164,21 @@ META_USE_TWITTER_PROPERTIES = True
 META_USE_SCHEMAORG_PROPERTIES = True
 # CSP_REPORT_URI = None  # Set to a URL to receive violation reports
 
-# Content Security Policy Configuration
+# Content Security Policy Configuration (updated for django-csp 4.0+)
 # Allow necessary resources for the Angular app and external CDNs
-CSP_DEFAULT_SRC = ["'self'"]
-CSP_SCRIPT_SRC = ["'self'", "'unsafe-eval'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://fonts.googleapis.com", "'unsafe-hashes'"]
-CSP_STYLE_SRC = ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://fonts.gstatic.com"]
-CSP_IMG_SRC = ["'self'", "data:", "https://cdn.flaticon.com", "https://fonts.gstatic.com"]
-CSP_FONT_SRC = ["'self'", "https://fonts.gstatic.com"]
-CSP_CONNECT_SRC = ["'self'", "https://api.flaticon.com"]
-CSP_OBJECT_SRC = ["'none'"]
-CSP_BASE_URI = ["'self'"]
-CSP_FRAME_SRC = ["'self'"]
+CONTENT_SECURITY_POLICY = {
+    'DIRECTIVES': {
+        'base-uri': ["'self'"],
+        'connect-src': ["'self'", 'https://api.flaticon.com'],
+        'default-src': ["'self'"],
+        'font-src': ["'self'", 'https://fonts.gstatic.com'],
+        'frame-src': ["'self'"],
+        'img-src': ["'self'", "data:", "https://cdn.flaticon.com", "https://fonts.gstatic.com"],
+        'object-src': ["'none'"],
+        'script-src': ["'self'", "'unsafe-eval'", "'unsafe-inline'", 'https://cdn.jsdelivr.net', 'https://fonts.googleapis.com', "'unsafe-hashes'"],
+        'style-src': ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com', 'https://fonts.gstatic.com']
+    }
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -290,6 +294,11 @@ ACCOUNT_SESSION_REMEMBER = True
 # Use the new format to avoid all warnings
 ACCOUNT_LOGIN_METHODS = ['username', 'email']  # Allow login with username or email
 ACCOUNT_SIGNUP_FIELDS = ['username', 'email', 'password1', 'password2']  # Required fields for signup
+
+# Add deprecated settings for backward compatibility with dj-rest-auth
+# These can be removed once dj-rest-auth is updated to support new allauth format
+ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_LOGIN_ATTEMPT_LIMIT = None
 ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = "/"
