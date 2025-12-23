@@ -294,6 +294,8 @@ fi
 echo "🔍 Checking service status..."
 echo "🎉 Production services are running with Nginx and Gunicorn!"
 
+fi
+
 # Display deployment information based on setup type
 if [[ "$use_production" =~ ^[Yy]$ ]]; then
     echo "🎉 Production Deployment completed successfully!"
@@ -331,6 +333,7 @@ if [[ "$use_production" =~ ^[Yy]$ ]]; then
     echo "2. Set up monitoring and backups"
     echo "3. Configure email settings for production"
     echo "4. Set up regular database backups"
+fi
 
 echo ""
 echo "📚 Documentation: See README.md for more information"
