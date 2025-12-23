@@ -1,0 +1,44 @@
+import { Component, OnInit, Input } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { UserService } from '@discussit/core/services/user/user.service';
+import { CommentService } from '@discussit/core/services/comment/comment.service';
+import { GroupService } from '@discussit/core/services/group/group.service';
+import { User } from '@discussit/core/models/user.model';
+import { Group } from '@discussit/core/models/group.model';
+import { UserComment } from '@discussit/core/models/comment.model';
+
+@Component({
+  
+  selector: 'app-profile-downvotes',
+  standalone: false,
+  templateUrl: './profile-downvotes.component.html',
+  styleUrls: ['./profile-downvotes.component.scss']
+})
+export class ProfileDownvotesComponent implements OnInit {
+  isLoading: boolean = false;
+  @Input() user: User;
+  @Input() self: boolean;
+  @Input() currentUser: string;
+
+  downvotes = [];
+
+  constructor(
+    private userService: UserService,
+    private groupService: GroupService,
+    private commentService: CommentService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) { }
+
+  ngOnInit(): void {
+    this.getUserDownvotes();
+  }
+
+  getUserDownvotes() {
+    this.userService.userDownvotes(this.currentUser).subscribe(
+      (response: any) => {
+        const data = [...response.posts, ...response.comments];
+        this.downvotes = data.sort((a, b) => b.created_at - a.created_at);
+      });
+  }
+}

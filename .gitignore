@@ -82,6 +82,8 @@ db.sqlite3
 db.sqlite3-journal
 
 # Django staticfiles cache and build artifacts
+# Track frontend source code but not built files
+!staticfiles/frontend/app/
 staticfiles/
 staticfiles/**/*.map
 staticfiles/**/*old*/

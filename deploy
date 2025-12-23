@@ -55,18 +55,24 @@ echo "📦 Installing Python dependencies..."
 pip install -r requirements.txt || error_exit "Failed to install Python dependencies"
 
 # Check for Angular frontend and build it
-ANGULAR_DIR="static/frontend/app"
+ANGULAR_DIR="frontend/app"
 TARGET_ANGULAR_DIR="staticfiles/frontend/app"
 
 echo "🔍 Checking for Angular frontend..."
 echo "   Looking in: $ANGULAR_DIR"
 
-# Ensure Angular symlink exists
-if [ ! -L "$ANGULAR_DIR" ] && [ -d "$TARGET_ANGULAR_DIR" ]; then
-    echo "🔗 Creating Angular frontend symlink..."
-    mkdir -p "$(dirname "$ANGULAR_DIR")"
-    ln -s "../../staticfiles/frontend/app" "$ANGULAR_DIR"
-    echo "✅ Angular frontend symlink created"
+# Ensure Angular source directory exists
+if [ ! -d "$ANGULAR_DIR" ]; then
+    echo "🔗 Creating Angular frontend directory..."
+    mkdir -p "$ANGULAR_DIR"
+    echo "✅ Angular frontend directory created"
+fi
+
+# Copy Angular source if it doesn't exist in the target location
+if [ -d "$ANGULAR_DIR" ] && [ ! -d "$TARGET_ANGULAR_DIR" ]; then
+    echo "📁 Copying Angular source to build location..."
+    rsync -a "$ANGULAR_DIR/" "$TARGET_ANGULAR_DIR/"
+    echo "✅ Angular source copied to build location"
 fi
 
 if [ -d "$ANGULAR_DIR" ] && [ -f "$ANGULAR_DIR/package.json" ]; then
