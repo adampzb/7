@@ -75,9 +75,11 @@ export class CreatePostComponent implements OnInit {
     console.log('TinyMCE editor is ready to use!', editor);
   }
 
-  public onEditorChange(content: string) {
-    // TinyMCE provides the content directly
-    this.postForm.patchValue({ content: content });
+  public onEditorChange(event: any) {
+    // TinyMCE provides content in the event object
+    if (event && event.editor) {
+      this.postForm.patchValue({ content: event.editor.getContent() });
+    }
   }
 
   getAuthUser(): void {
