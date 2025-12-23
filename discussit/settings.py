@@ -146,24 +146,7 @@ REST_AUTH = {
 csrf_origins = get_env_variable('CSRF_TRUSTED_ORIGINS', 'http://localhost:8000,http://127.0.0.1:8000,http://51.15.115.36:8000,')
 CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in csrf_origins.split(',') if origin.strip()]
 
-# Content Security Policy Configuration (using django-csp 4.0+ format)
-CONTENT_SECURITY_POLICY = {
-    'DIRECTIVES': {
-        'default-src': ["'self'"],
-        'script-src': ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://fonts.gstatic.com"],
-        'style-src': ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://fonts.gstatic.com"],
-        'img-src': ["'self'", "data:", "https://fonts.gstatic.com", "https://cdn-icons-png.flaticon.com"],
-        'font-src': ["'self'", "https://fonts.gstatic.com"],
-        'connect-src': ["'self'", "http://localhost:8000", "http://127.0.0.1:8000", "http://51.15.115.36:8000"],
-        'object-src': ["'none'"],
-        'base-uri': ["'self'"],
-        'frame-ancestors': ["'none'"],
-        'form-action': ["'self'"],
-    },
-    'EXCLUDE_URL_PREFIXES': ('/admin/', '/api/swagger/', '/api/redoc/'),
-    'REPORT_ONLY': False,  # Set to True for testing mode
-    'REPORT_URI': None,  # Set to a URL to receive violation reports
-}
+
 
 # Haystack Search Configuration
 HAYSTACK_CONNECTIONS = {
@@ -183,7 +166,6 @@ META_USE_SCHEMAORG_PROPERTIES = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'csp.middleware.CSPMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
