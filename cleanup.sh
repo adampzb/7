@@ -80,8 +80,10 @@ echo "📦 Removing Node.js artifacts..."
 rm -rf node_modules/ 2>/dev/null || echo "⚠️  Node modules may not exist"
 rm -f package-lock.json 2>/dev/null || echo "⚠️  Package lock file may not exist"
 
-# Clean up database files (if using SQLite)
+# Clean up database files (SQLite and PostgreSQL)
 echo "🗃️  Removing database files..."
+
+# SQLite cleanup
 if [ -f "db.sqlite3" ]; then
     echo "⚠️  WARNING: About to delete SQLite database file!"
     read -p "💾 Do you want to backup the database first? (y/n) " backup_db
@@ -96,9 +98,49 @@ else
     echo "ℹ️  SQLite database may not exist"
 fi
 
+# PostgreSQL cleanup (Docker volumes)
+if command_exists docker; then
+    echo "🐳 Checking for Docker PostgreSQL volumes..."
+    if docker volume ls | grep -q "7_postgres_data"; then
+        read -p "💾 Do you want to remove PostgreSQL Docker volume? (y/n) " remove_pg_volume
+        if [[ "$remove_pg_volume" =~ ^[Yy]$ ]]; then
+            echo "⚠️  WARNING: This will delete ALL PostgreSQL data!"
+            read -p "🔥 Are you absolutely sure? (y/n) " confirm_pg_delete
+            if [[ "$confirm_pg_delete" =~ ^[Yy]$ ]]; then
+                docker volume rm 7_postgres_data
+                echo "✅ PostgreSQL Docker volume removed"
+            else
+                echo "🛑 PostgreSQL volume deletion cancelled"
+            fi
+        else
+            echo "🛑 PostgreSQL volume kept"
+        fi
+    else
+        echo "ℹ️  PostgreSQL Docker volume not found"
+    fi
+fi
+
 # Clean up logs
 echo "📜 Removing log files..."
 rm -rf logs/* 2>/dev/null || echo "⚠️  Log directory may not exist"
+
+# Clean up Docker containers and images
+echo "🐳 Cleaning Docker artifacts..."
+if command_exists docker; then
+    # Stop and remove containers
+    echo "🔧 Stopping and removing Docker containers..."
+    docker-compose down -v 2>/dev/null || echo "⚠️  Docker containers may not be running"
+    
+    # Remove dangling images
+    echo "🗑️  Removing dangling Docker images..."
+    docker image prune -f 2>/dev/null || echo "⚠️  No dangling images to remove"
+    
+    # Remove unused volumes
+    echo "💾 Removing unused Docker volumes..."
+    docker volume prune -f 2>/dev/null || echo "⚠️  No unused volumes to remove"
+else
+    echo "ℹ️  Docker not found, skipping Docker cleanup"
+fi
 
 # Clean up any temporary files
 echo "🧹 Removing temporary files..."
@@ -118,6 +160,9 @@ echo "- Python cache: Cleaned"
 echo "- Node.js artifacts: Cleaned"
 echo "- Database files: Cleaned (with backup option)"
 echo "- Log files: Cleaned"
+echo "- Docker containers: Stopped and removed"
+echo "- Docker images: Pruned"
+echo "- Docker volumes: Pruned"
 echo ""
 echo "💡 Next steps for fresh deployment:"
 echo "1. Run: chmod +x deploy"
