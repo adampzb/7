@@ -65,7 +65,7 @@ echo "   Looking in: $ANGULAR_DIR"
 if [ ! -L "$ANGULAR_DIR" ] && [ -d "$TARGET_ANGULAR_DIR" ]; then
     echo "🔗 Creating Angular frontend symlink..."
     mkdir -p "$(dirname "$ANGULAR_DIR")"
-    ln -s "$TARGET_ANGULAR_DIR" "$ANGULAR_DIR"
+    ln -s "../../staticfiles/frontend/app" "$ANGULAR_DIR"
     echo "✅ Angular frontend symlink created"
 fi
 
