@@ -72,13 +72,14 @@ find . -name "*.pyo" -delete 2>/dev/null
 
 # Clean up Angular build artifacts
 echo "📦 Removing Angular build artifacts..."
-rm -rf static/frontend/app/dist/ 2>/dev/null || echo "⚠️  Angular build artifacts may not exist"
+rm -rf frontend/app/dist/ 2>/dev/null || echo "⚠️  Angular build artifacts may not exist"
 rm -rf staticfiles/frontend/app/dist/ 2>/dev/null || echo "⚠️  Angular build artifacts may not exist"
 
 # Clean up Node.js artifacts
 echo "📦 Removing Node.js artifacts..."
-rm -rf node_modules/ 2>/dev/null || echo "⚠️  Node modules may not exist"
-rm -f package-lock.json 2>/dev/null || echo "⚠️  Package lock file may not exist"
+rm -rf frontend/app/node_modules/ 2>/dev/null || echo "⚠️  Node modules may not exist"
+rm -rf staticfiles/frontend/app/node_modules/ 2>/dev/null || echo "⚠️  Node modules may not exist"
+rm -f frontend/app/package-lock.json 2>/dev/null || echo "⚠️  Package lock file may not exist"
 
 # Clean up database files (SQLite and PostgreSQL)
 echo "🗃️  Removing database files..."
