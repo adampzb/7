@@ -164,6 +164,18 @@ META_USE_TWITTER_PROPERTIES = True
 META_USE_SCHEMAORG_PROPERTIES = True
 # CSP_REPORT_URI = None  # Set to a URL to receive violation reports
 
+# Content Security Policy Configuration
+# Allow necessary resources for the Angular app and external CDNs
+CSP_DEFAULT_SRC = ["'self'"]
+CSP_SCRIPT_SRC = ["'self'", "'unsafe-eval'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://fonts.googleapis.com", "'unsafe-hashes'"]
+CSP_STYLE_SRC = ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://fonts.gstatic.com"]
+CSP_IMG_SRC = ["'self'", "data:", "https://cdn.flaticon.com", "https://fonts.gstatic.com"]
+CSP_FONT_SRC = ["'self'", "https://fonts.gstatic.com"]
+CSP_CONNECT_SRC = ["'self'", "https://api.flaticon.com"]
+CSP_OBJECT_SRC = ["'none'"]
+CSP_BASE_URI = ["'self'"]
+CSP_FRAME_SRC = ["'self'"]
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -175,6 +187,7 @@ MIDDLEWARE = [
     'axes.middleware.AxesMiddleware',
     'allauth.account.middleware.AccountMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'csp.middleware.CSPMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -611,7 +624,7 @@ TINYMCE_DEFAULT_CONFIG = {
     'content_style': 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
     'relative_urls': False,
     'remove_script_host': False,
-    'document_base_url': 'https://yourdomain.com/',
+    'document_base_url': '/',
     'entity_encoding': 'raw',
     'extended_valid_elements': 'script[src|type|language]',
     'valid_children': '+body[style]',
