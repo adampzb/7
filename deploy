@@ -56,9 +56,18 @@ pip install -r requirements.txt || error_exit "Failed to install Python dependen
 
 # Check for Angular frontend and build it
 ANGULAR_DIR="static/frontend/app"
+TARGET_ANGULAR_DIR="staticfiles/frontend/app"
 
 echo "🔍 Checking for Angular frontend..."
 echo "   Looking in: $ANGULAR_DIR"
+
+# Ensure Angular symlink exists
+if [ ! -L "$ANGULAR_DIR" ] && [ -d "$TARGET_ANGULAR_DIR" ]; then
+    echo "🔗 Creating Angular frontend symlink..."
+    mkdir -p "$(dirname "$ANGULAR_DIR")"
+    ln -s "$TARGET_ANGULAR_DIR" "$ANGULAR_DIR"
+    echo "✅ Angular frontend symlink created"
+fi
 
 if [ -d "$ANGULAR_DIR" ] && [ -f "$ANGULAR_DIR/package.json" ]; then
     echo "✅ Angular frontend found in: $ANGULAR_DIR"
