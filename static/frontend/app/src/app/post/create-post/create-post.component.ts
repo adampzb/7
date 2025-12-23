@@ -21,19 +21,15 @@ import { Group } from '@discussit/core/models/group.model';
   styleUrls: ['./create-post.component.scss']
 })
 export class CreatePostComponent implements OnInit {
-  public quillConfig = {
-    toolbar: [
-      ['bold', 'italic', 'underline', 'strike'],
-      ['blockquote', 'code-block'],
-      [{ 'header': 1 }, { 'header': 2 }],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      [{ 'script': 'sub'}, { 'script': 'super' }],
-      [{ 'indent': '-1'}, { 'indent': '+1' }],
-      ['link'],
-      ['clean']
-    ],
+  public tinymceConfig = {
+    plugins: 'link lists code',
+    toolbar: 'bold italic underline strikethrough | bullist numlist | blockquote code | link | removeformat',
+    menubar: false,
+    statusbar: false,
     placeholder: 'Write your post content here...',
-    theme: 'snow'
+    height: 400,
+    skin: 'oxide',
+    content_css: 'default'
   };
 
   postForm: FormGroup;
@@ -76,12 +72,12 @@ export class CreatePostComponent implements OnInit {
   }
 
   public onEditorReady(editor: any) {
-    console.log('Quill editor is ready to use!', editor);
+    console.log('TinyMCE editor is ready to use!', editor);
   }
 
-  public onEditorChange(event: any) {
-    // Quill provides the content directly in the event
-    this.postForm.patchValue({ content: event.html });
+  public onEditorChange(content: string) {
+    // TinyMCE provides the content directly
+    this.postForm.patchValue({ content: content });
   }
 
   getAuthUser(): void {

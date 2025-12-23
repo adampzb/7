@@ -71,6 +71,8 @@ fi
 # Copy Angular source if it doesn't exist in the target location
 if [ -d "$ANGULAR_DIR" ] && [ ! -d "$TARGET_ANGULAR_DIR" ]; then
     echo "📁 Copying Angular source to build location..."
+    # Create target directory structure first
+    mkdir -p "$TARGET_ANGULAR_DIR"
     rsync -a "$ANGULAR_DIR/" "$TARGET_ANGULAR_DIR/"
     echo "✅ Angular source copied to build location"
 fi
@@ -150,7 +152,7 @@ if [ -d "$ANGULAR_DIR" ] && [ -f "$ANGULAR_DIR/package.json" ]; then
     
     # Copy built files to static directory
     echo "📁 Copying built files to static directory..."
-    rsync -a dist/ ../../static/ || error_exit "Failed to copy static files"
+    rsync -a dist/ "$PROJECT_DIR/static/" || error_exit "Failed to copy static files"
     
     # Return to project root
     cd "$PROJECT_DIR" || error_exit "Failed to return to project directory"

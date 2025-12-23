@@ -24,12 +24,12 @@
       <div class=""></div>
 
       <div class="editor-container width-100">
-        <quill-editor 
-          [modules]="quillConfig"
+        <editor 
+          [init]="tinymceConfig"
           formControlName="content"
-          (onEditorCreated)="onEditorReady($event)"
-          (onContentChanged)="onEditorChange($event)">
-        </quill-editor>
+          (onInit)="onEditorReady($event)"
+          (onEditorChange)="onEditorChange($event)">
+        </editor>
       </div>
 
       <!-- <input type="file"  formControlName="cover" (change)="onFileSelected($event.target.files)" #fileUpload> -->
