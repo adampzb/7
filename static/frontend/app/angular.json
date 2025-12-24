@@ -54,6 +54,17 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "test": {
+              "optimization": false,
+              "outputHashing": "all",
+              "sourceMap": true,
+              "extractCss": false,
+              "namedChunks": true,
+              "aot": false,
+              "extractLicenses": false,
+              "vendorChunk": true,
+              "buildOptimizer": false
             }
           }
         },
