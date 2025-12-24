@@ -24,7 +24,6 @@ bootstrapApplication(AppComponent, {
     provideAnimations(),
     CookieService,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: HttpXsrfInterceptor, multi: true },
-    importProvidersFrom(HttpClientModule)
+    { provide: HTTP_INTERCEPTORS, useClass: HttpXsrfInterceptor, multi: true }
   ]
 }).catch(err => console.error(err));
