@@ -79,7 +79,7 @@ export class ProfileComponent implements OnInit {
           this.userService.user.subscribe(
             (response: User) => {
               this.user = response;
-              if(this.user && this.user.username == this.currentUser) {
+              if(this.user && this.user.username === this.currentUser) {
                 this.self = true;
               }
           })

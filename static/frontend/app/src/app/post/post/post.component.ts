@@ -45,7 +45,7 @@ export class PostComponent implements OnInit {
 
   upvoteClicked(){
     if(!this.user_id) return
-    if (this.user_vote == 1) {
+    if (this.user_vote === 1) {
       this.removeVote();
     } else {
       this.upvote();
@@ -54,7 +54,7 @@ export class PostComponent implements OnInit {
 
   downvoteClicked(){
     if(!this.user_id) return
-    if (this.user_vote == -1) {
+    if (this.user_vote === -1) {
       this.removeVote();
     } else {
       this.downvote();

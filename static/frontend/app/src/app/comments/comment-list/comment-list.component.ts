@@ -29,7 +29,7 @@ export class CommentListComponent implements OnInit {
 
   removed(removed_comment: any) {
     this.comments.map((comment, index) => {
-      if (comment.id == removed_comment.id) {
+      if (comment.id === removed_comment.id) {
         this.comments.splice(index, 1);
       }
     });
