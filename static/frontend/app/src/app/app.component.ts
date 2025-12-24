@@ -13,7 +13,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { CreateGroupComponent } from './group/create-group/create-group.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
@@ -32,7 +31,6 @@ import { MatInputModule } from '@angular/material/input';
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule,
     MatButtonModule,
     MatToolbarModule,
     MatIconModule,

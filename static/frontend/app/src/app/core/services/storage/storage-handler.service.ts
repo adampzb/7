@@ -47,10 +47,10 @@ export class StorageHandlerService {
   }
 
   getCurrentUserLocalStorage() {
-    var data = localStorage.getItem('user');
+    const data = localStorage.getItem('user');
     if(data) {
       const decodedString = decodeURIComponent(escape(atob(data)));
-      var jsonData = JSON.parse(decodedString);
+      const jsonData = JSON.parse(decodedString);
       return jsonData;
     }
     else {
@@ -62,7 +62,7 @@ export class StorageHandlerService {
     let stringifyData = JSON.stringify(user);
     stringifyData = stringifyData.replace(/\s/g, '');
     const encodedUrl = btoa(unescape(stringifyData));
-    if(this.getCurrentUserLocalStorage() != null) {
+    if(this.getCurrentUserLocalStorage() !== null) {
       localStorage.removeItem('user');
     }
     localStorage.setItem('user', encodedUrl);

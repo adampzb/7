@@ -101,7 +101,7 @@ export class CommentGroupComponent implements OnInit {
   }
 
   loadMoreComments() {
-    if (this.next != null) {
+    if (this.next !== null) {
       this.getComments();
     }
   }

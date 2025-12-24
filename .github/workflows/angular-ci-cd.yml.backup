@@ -45,14 +45,6 @@ jobs:
     - name: Run linting
       working-directory: ./static/frontend/app
       run: ng lint
-
-    - name: Install Playwright browsers
-      working-directory: ./static/frontend/app
-      run: npx playwright install --with-deps
-
-    - name: Run Playwright e2e tests
-      working-directory: ./static/frontend/app
-      run: npx playwright test
     
     - name: Build Angular app
       working-directory: ./static/frontend/app
