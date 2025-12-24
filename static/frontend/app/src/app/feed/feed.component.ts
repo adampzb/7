@@ -4,12 +4,28 @@ import { PostService } from '../core/services/post/post.service';
 import { GroupService } from '../core/services/group/group.service';
 import { User } from '../core/models/user.model';
 import { Post } from '../core/models/post.model';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatListModule } from '@angular/material/list';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { PostComponent } from '../post/post/post.component';
+import { PostLoaderComponent } from '../post/post-loader/post-loader.component';
 
 @Component({
-  standalone: false,
+  standalone: true,
   selector: 'app-feed',
   templateUrl: './feed.component.html',
-  styleUrls: ['./feed.component.scss']
+  styleUrls: ['./feed.component.scss'],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatButtonModule,
+    MatListModule,
+    MatProgressSpinnerModule,
+    PostComponent,
+    PostLoaderComponent
+  ]
 })
 
 export class FeedComponent implements OnInit {

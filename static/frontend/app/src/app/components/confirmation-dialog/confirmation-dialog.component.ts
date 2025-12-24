@@ -1,11 +1,15 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-confirmation-dialog',
-  standalone: false,
+  standalone: true,
   templateUrl: './confirmation-dialog.component.html',
-  styleUrls: ['./confirmation-dialog.component.scss']
+  styleUrls: ['./confirmation-dialog.component.scss'],
+  imports: [CommonModule, MatButtonModule, MatDialogModule]
 })
 export class ConfirmationDialogComponent implements OnInit {
   showCancel: boolean;

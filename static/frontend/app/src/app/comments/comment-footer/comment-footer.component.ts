@@ -2,14 +2,18 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CommentService } from '@discussit/core/services/comment/comment.service';
 import { User } from '@discussit/core/models/user.model';
 import { Comment } from '@discussit/core/models/comment.model';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @Component({
   
   selector: 'app-comment-footer',
-  standalone: false,
+  standalone: true,
   templateUrl: './comment-footer.component.html',
-  styleUrls: ['./comment-footer.component.scss']
+  styleUrls: ['./comment-footer.component.scss'],
+  imports: [CommonModule, MatButtonModule, MatIconModule]
 })
 export class CommentFooterComponent implements OnInit {
   @Input() comment: Comment;

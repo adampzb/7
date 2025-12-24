@@ -5,13 +5,32 @@ import { User } from '@discussit/core/models/user.model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 import { GroupService } from '@discussit/core/services/group/group.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   
   selector: 'app-create-group',
-  standalone: false,
+  standalone: true,
   templateUrl: './create-group.component.html',
-  styleUrls: ['./create-group.component.scss']
+  styleUrls: ['./create-group.component.scss'],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatRadioModule,
+    MatSelectModule
+  ]
 })
 export class CreateGroupComponent implements OnInit {
   new: boolean = true;

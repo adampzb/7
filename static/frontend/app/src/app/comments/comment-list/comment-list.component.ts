@@ -1,14 +1,17 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Comment } from '@discussit/core/models/comment.model';
 import { User } from '@discussit/core/models/user.model';
+import { CommonModule } from '@angular/common';
+import { CommentComponent } from '../comment/comment.component';
 
 
 @Component({
   
   selector: 'app-comment-list',
-  standalone: false,
+  standalone: true,
   templateUrl: './comment-list.component.html',
-  styleUrls: ['./comment-list.component.scss']
+  styleUrls: ['./comment-list.component.scss'],
+  imports: [CommonModule, CommentComponent]
 })
 export class CommentListComponent implements OnInit {
   @Input() comments: Comment[] = [];

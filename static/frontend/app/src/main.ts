@@ -1,13 +1,30 @@
-import { enableProdMode } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { enableProdMode, importProvidersFrom } from '@angular/core';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
-import { AppModule } from './app/app.module';
+import { AppComponent } from './app/app.component';
+import { appRoutes } from './app/app-routing.module';
 import { environment } from './environments/environment';
-import '@angular/compiler';
+import { CookieService } from 'ngx-cookie-service';
+import { AuthInterceptor } from './app/auth.interceptor';
+import { HttpXsrfInterceptor } from './app/auth.header.interceptor';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthGuard } from './app/core/guards/auth/auth.guard';
 
 if (environment.production) {
   enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.error(err));
+bootstrapApplication(AppComponent, {
+  providers: [
+    provideRouter(appRoutes),
+    provideHttpClient(withInterceptorsFromDi()),
+    provideAnimations(),
+    CookieService,
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: HttpXsrfInterceptor, multi: true },
+    importProvidersFrom(HttpClientModule)
+  ]
+}).catch(err => console.error(err));

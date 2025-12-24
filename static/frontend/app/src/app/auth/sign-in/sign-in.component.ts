@@ -3,13 +3,32 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '@discussit/core/services/user/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 @Component({
   selector: 'app-sign-in',
-  standalone: false,
+  standalone: true,
   templateUrl: './sign-in.component.html',
-  styleUrls: ['./sign-in.component.scss']
+  styleUrls: ['./sign-in.component.scss'],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatSnackBarModule
+  ]
 })
 export class SignInComponent implements OnInit {
   loginForm: FormGroup;

@@ -9,7 +9,7 @@
           {{ group.description }}
         </p>
         <div class="" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
-          <ng-container *ngIf="group.group_type == 'PUBLIC'; else otherGroupType">
+          <ng-container *ngIf="group.group_type === 'PUBLIC'; else otherGroupType">
             <mat-icon class="color-tertiary">people</mat-icon>
             <span class="subtext">
               {{ group.group_type }}

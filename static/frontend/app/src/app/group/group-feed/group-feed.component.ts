@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PostService } from '@discussit/core/services/post/post.service';
@@ -15,7 +15,7 @@ import { Group } from '@discussit/core/models/group.model';
   templateUrl: './group-feed.component.html',
   styleUrls: ['./group-feed.component.scss']
 })
-export class GroupFeedComponent implements OnInit {
+export class GroupFeedComponent implements OnInit, OnChanges {
   groupPosts: Post[] = []
   user: User;
   @Input() group: Group;

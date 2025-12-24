@@ -1,13 +1,28 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Comment } from '@discussit/core/models/comment.model';
 import { User } from '@discussit/core/models/user.model';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { EditorModule } from '@tinymce/tinymce-angular';
 
 @Component({
   
   selector: 'app-comment-create',
-  standalone: false,
+  standalone: true,
   templateUrl: './comment-create.component.html',
-  styleUrls: ['./comment-create.component.scss']
+  styleUrls: ['./comment-create.component.scss'],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    EditorModule
+  ]
 })
 export class CommentCreateComponent implements OnInit {
   @Input() user: User;

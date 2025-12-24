@@ -5,14 +5,34 @@ import { MatDialog } from '@angular/material/dialog';
 import { User } from '@discussit/core/models/user.model';
 import { Comment } from '@discussit/core/models/comment.model';
 import { ConfirmationDialogComponent } from '@discussit/app/components/confirmation-dialog/confirmation-dialog.component';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDialogModule } from '@angular/material/dialog';
+import { TimeSincePipe } from '@discussit/core/pipes/time-since/time-since.pipe';
+import { SafeContentPipe } from '@discussit/core/pipes/safe-content/safe-content.pipe';
+import { CommentCreateComponent } from '../comment-create/comment-create.component';
 
 
 @Component({
   
   selector: 'app-comment',
-  standalone: false,
+  standalone: true,
   templateUrl: './comment.component.html',
-  styleUrls: ['./comment.component.scss']
+  styleUrls: ['./comment.component.scss'],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatButtonModule,
+    MatIconModule,
+    MatMenuModule,
+    MatDialogModule,
+    TimeSincePipe,
+    SafeContentPipe,
+    CommentCreateComponent
+  ]
 })
 export class CommentComponent implements OnInit {
   @Input() comment: Comment;

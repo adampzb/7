@@ -1,3 +1,26 @@
+.feed-container {
+  display: flex;
+  gap: 16px;
+}
+
+.main-content {
+  flex: 70%;
+  width: 70%;
+}
+
+.sidebar {
+  flex: 30%;
+  width: 30%;
+}
+
+.loader-container, .load-more-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  height: 100px;
+}
+
 .related-section {
   background-color: white;
   min-height: 300px;
@@ -5,4 +28,15 @@
   border: 1px solid #dedede;
   border-radius: 8px;
   padding: 16px;
+}
+
+@media (max-width: 1200px) {
+  .sidebar {
+    display: none;
+  }
+  
+  .main-content {
+    flex: 100%;
+    width: 100%;
+  }
 }

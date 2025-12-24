@@ -1,13 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-sign-out',
-  standalone: false,
+  standalone: true,
   templateUrl: './sign-out.component.html',
-  styleUrls: ['./sign-out.component.scss']
+  styleUrls: ['./sign-out.component.scss'],
+  imports: [CommonModule, RouterModule]
 })
 export class SignOutComponent implements OnInit {
   fragment: string;

@@ -6,17 +6,41 @@ import { CookieService } from 'ngx-cookie-service';
 import { User } from './core/models/user.model';
 import { environment } from '@discussit/env/environment';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { ActivatedRoute, Router, NavigationEnd, RouterModule } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 import { MatDialog } from '@angular/material/dialog';
 import { CreateGroupComponent } from './group/create-group/create-group.component';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { MatButtonModule } from '@angular/material/button';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  standalone: false
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    MatButtonModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatMenuModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule
+  ]
 })
 export class AppComponent implements OnInit, AfterContentChecked {
   title = 'discussit';

@@ -1,5 +1,5 @@
-<div fxLayout="row" fxLayoutGap="16px">
-  <div fxLayout="column" fxFlex="70" fxFlex.lt-lg="100">
+<div class="feed-container">
+  <div class="main-content">
     <div class="width-100">
       <ng-container *ngIf="isLoading; else showPosts">
         <app-post-loader></app-post-loader>
@@ -18,13 +18,13 @@
 
       <ng-container *ngIf="next">
         <ng-container *ngIf="showLoader; else buttonview">
-          <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px" style="height: 100px">
+          <div class="loader-container">
             <mat-spinner color="warn" [diameter]="30"></mat-spinner>
           </div>
         </ng-container>
 
         <ng-template #buttonview>
-          <div *ngIf="!showLoader && next" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px" style="height: 100px">
+          <div *ngIf="!showLoader && next" class="load-more-container">
             <button mat-raised-button (click)="loadMorePosts()">Load more posts</button>
           </div>
         </ng-template>
@@ -32,7 +32,7 @@
     </div>
   </div>
 
-  <div fxLayout="column" fxFlex="30" fxHide.lt-lg>
+  <div class="sidebar">
     <div class="related-section">
       <span class="heading-5 text-uppercase">
         Top Communities

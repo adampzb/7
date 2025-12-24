@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 @Pipe({
-  standalone: false,
+  standalone: true,
   name: 'safeContent'
 })
 export class SafeContentPipe implements PipeTransform {

@@ -4,12 +4,26 @@ import { UserService } from '@discussit/core/services/user/user.service';
 import { PostService } from '@discussit/core/services/post/post.service';
 import { User } from '@discussit/core/models/user.model';
 import { Post } from '@discussit/core/models/post.model';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { PostComponent } from '../post/post/post.component';
+import { PostLoaderComponent } from '../post/post-loader/post-loader.component';
 
 @Component({
-  standalone: false,
+  standalone: true,
   selector: 'app-search',
   templateUrl: './search.component.html',
-  styleUrls: ['./search.component.scss']
+  styleUrls: ['./search.component.scss'],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatButtonModule,
+    MatProgressSpinnerModule,
+    PostComponent,
+    PostLoaderComponent
+  ]
 })
 export class SearchComponent implements OnInit {
   posts: Post[] = []

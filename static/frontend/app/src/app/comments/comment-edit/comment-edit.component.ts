@@ -3,14 +3,29 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { User } from '@discussit/core/models/user.model';
 import { Comment } from '@discussit/core/models/comment.model';
 import { CommentService } from '@discussit/core/services/comment/comment.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 @Component({
   
   selector: 'app-comment-edit',
-  standalone: false,
+  standalone: true,
   templateUrl: './comment-edit.component.html',
-  styleUrls: ['./comment-edit.component.scss']
+  styleUrls: ['./comment-edit.component.scss'],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatProgressSpinnerModule
+  ]
 })
 export class CommentEditComponent implements OnInit {
   @Input() user: User;

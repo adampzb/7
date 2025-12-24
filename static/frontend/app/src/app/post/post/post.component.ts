@@ -4,12 +4,28 @@ import { PostService } from '@discussit/core/services/post/post.service';
 import { environment } from '@discussit/env/environment';
 import { MatDialog } from '@angular/material/dialog';
 import { ReportDialogComponent } from '@discussit/app/components/report-dialog/report-dialog.component';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDialogModule } from '@angular/material/dialog';
+import { SafeContentPipe } from '@discussit/core/pipes/safe-content/safe-content.pipe';
 
 @Component({
   selector: 'app-post',
-  standalone: false,
+  standalone: true,
   templateUrl: './post.component.html',
-  styleUrls: ['./post.component.scss']
+  styleUrls: ['./post.component.scss'],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatButtonModule,
+    MatIconModule,
+    MatMenuModule,
+    MatDialogModule,
+    SafeContentPipe
+  ]
 })
 export class PostComponent implements OnInit {
   @Input() post: Post;

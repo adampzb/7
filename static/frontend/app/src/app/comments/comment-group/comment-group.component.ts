@@ -5,13 +5,27 @@ import { CommentService } from '@discussit/core/services/comment/comment.service
 import { UserService } from '@discussit/core/services/user/user.service';
 import { environment } from '@discussit/env/environment';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CommentCreateComponent } from '../comment-create/comment-create.component';
+import { CommentListComponent } from '../comment-list/comment-list.component';
 
 @Component({
   
   selector: 'app-comment-group',
-  standalone: false,
+  standalone: true,
   templateUrl: './comment-group.component.html',
-  styleUrls: ['./comment-group.component.scss']
+  styleUrls: ['./comment-group.component.scss'],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatButtonModule,
+    MatProgressSpinnerModule,
+    CommentCreateComponent,
+    CommentListComponent
+  ]
 })
 export class CommentGroupComponent implements OnInit {
   comments: Comment[] = []
