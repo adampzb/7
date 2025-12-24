@@ -1,18 +1,45 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { UserService } from '@discussit/core/services/user/user.service';
 import { CommentService } from '@discussit/core/services/comment/comment.service';
 import { GroupService } from '@discussit/core/services/group/group.service';
 import { User } from '@discussit/core/models/user.model';
 import { Group } from '@discussit/core/models/group.model';
 import { UserComment } from '@discussit/core/models/comment.model';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ProfileOverviewComponent } from '../profile-overview/profile-overview.component';
+import { ProfilePostsComponent } from '../profile-posts/profile-posts.component';
+import { ProfileCommentsComponent } from '../profile-comments/profile-comments.component';
+import { ProfileBookmarksComponent } from '../profile-bookmarks/profile-bookmarks.component';
+import { ProfileUpvotesComponent } from '../profile-upvotes/profile-upvotes.component';
+import { ProfileDownvotesComponent } from '../profile-downvotes/profile-downvotes.component';
+import { ProfileHistoryComponent } from '../profile-history/profile-history.component';
 
 @Component({
   
   selector: 'app-profiles',
-  standalone: false,
+  standalone: true,
   templateUrl: './profiles.component.html',
-  styleUrls: ['./profiles.component.scss']
+  styleUrls: ['./profiles.component.scss'],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTabsModule,
+    MatProgressSpinnerModule,
+    ProfileOverviewComponent,
+    ProfilePostsComponent,
+    ProfileCommentsComponent,
+    ProfileBookmarksComponent,
+    ProfileUpvotesComponent,
+    ProfileDownvotesComponent,
+    ProfileHistoryComponent
+  ]
 })
 export class ProfileComponent implements OnInit {
   isLoading: boolean = false;

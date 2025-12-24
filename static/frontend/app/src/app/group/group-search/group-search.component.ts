@@ -1,18 +1,31 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { UserService } from '@discussit/core/services/user/user.service';
 import { GroupService } from '@discussit/core/services/group/group.service';
 import { Group } from '@discussit/core/models/group.model';
 import { User } from '@discussit/core/models/user.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '@discussit/app/components/confirmation-dialog/confirmation-dialog.component';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   
   selector: 'app-group-search',
-  standalone: false,
+  standalone: true,
   templateUrl: './group-search.component.html',
-  styleUrls: ['./group-search.component.scss']
+  styleUrls: ['./group-search.component.scss'],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatButtonModule,
+    MatIconModule,
+    MatDialogModule,
+    MatCardModule
+  ]
 })
 export class GroupSearchComponent implements OnInit {
   groups = [];

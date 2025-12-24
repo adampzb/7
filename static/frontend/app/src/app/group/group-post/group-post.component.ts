@@ -7,12 +7,33 @@ import { GroupService } from '@discussit/core/services/group/group.service';
 import { User } from '@discussit/core/models/user.model';
 import { Post } from '@discussit/core/models/post.model';
 import { Group } from '@discussit/core/models/group.model';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { EditorModule } from '@tinymce/tinymce-angular';
 @Component({
   
   selector: 'app-group-post',
-  standalone: false,
+  standalone: true,
   templateUrl: './group-post.component.html',
-  styleUrls: ['./group-post.component.scss']
+  styleUrls: ['./group-post.component.scss'],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    RouterModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatProgressSpinnerModule,
+    EditorModule
+  ]
 })
 export class GroupPostComponent implements OnInit {
   group: Group;

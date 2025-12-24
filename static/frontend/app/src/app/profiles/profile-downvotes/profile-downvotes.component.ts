@@ -6,13 +6,17 @@ import { GroupService } from '@discussit/core/services/group/group.service';
 import { User } from '@discussit/core/models/user.model';
 import { Group } from '@discussit/core/models/group.model';
 import { UserComment } from '@discussit/core/models/comment.model';
+import { CommonModule } from '@angular/common';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { PostComponent } from '@discussit/app/post/post/post.component';
 
 @Component({
   
   selector: 'app-profile-downvotes',
-  standalone: false,
+  standalone: true,
   templateUrl: './profile-downvotes.component.html',
-  styleUrls: ['./profile-downvotes.component.scss']
+  styleUrls: ['./profile-downvotes.component.scss'],
+  imports: [CommonModule, MatProgressSpinnerModule, PostComponent]
 })
 export class ProfileDownvotesComponent implements OnInit {
   isLoading: boolean = false;

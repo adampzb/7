@@ -1,16 +1,31 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { UserService } from '@discussit/core/services/user/user.service';
 import { PostService } from '@discussit/core/services/post/post.service';
 import { Post } from '@discussit/core/models/post.model';
 import { User } from '@discussit/core/models/user.model';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { PostComponent } from '../post/post.component';
+import { CommentGroupComponent } from '@discussit/app/comments/comment-group/comment-group.component';
 
 
 @Component({
   selector: 'app-post-detail',
-  standalone: false,
+  standalone: true,
   templateUrl: './post-detail.component.html',
-  styleUrls: ['./post-detail.component.scss']
+  styleUrls: ['./post-detail.component.scss'],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatButtonModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    PostComponent,
+    CommentGroupComponent
+  ]
 })
 export class PostDetailComponent implements OnInit {
   post: Post;

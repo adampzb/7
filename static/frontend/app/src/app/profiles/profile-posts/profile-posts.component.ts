@@ -4,13 +4,25 @@ import { UserService } from '@discussit/core/services/user/user.service';
 import { PostService } from '@discussit/core/services/post/post.service';
 import { User } from '@discussit/core/models/user.model';
 import { Post } from '@discussit/core/models/post.model';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { PostComponent } from '@discussit/app/post/post/post.component';
+import { PostLoaderComponent } from '@discussit/app/post/post-loader/post-loader.component';
 
 @Component({
   
   selector: 'app-profile-posts',
-  standalone: false,
+  standalone: true,
   templateUrl: './profile-posts.component.html',
-  styleUrls: ['./profile-posts.component.scss']
+  styleUrls: ['./profile-posts.component.scss'],
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatProgressSpinnerModule,
+    PostComponent,
+    PostLoaderComponent
+  ]
 })
 export class ProfilePostsComponent implements OnInit {
   @Input() user: User;

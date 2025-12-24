@@ -7,13 +7,27 @@ import { GroupService } from '@discussit/core/services/group/group.service';
 import { User } from '@discussit/core/models/user.model';
 import { Post } from '@discussit/core/models/post.model';
 import { Group } from '@discussit/core/models/group.model';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { PostComponent } from '@discussit/app/post/post/post.component';
+import { PostLoaderComponent } from '@discussit/app/post/post-loader/post-loader.component';
 
 @Component({
   
   selector: 'app-group-feed',
-  standalone: false,
+  standalone: true,
   templateUrl: './group-feed.component.html',
-  styleUrls: ['./group-feed.component.scss']
+  styleUrls: ['./group-feed.component.scss'],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatButtonModule,
+    MatProgressSpinnerModule,
+    PostComponent,
+    PostLoaderComponent
+  ]
 })
 export class GroupFeedComponent implements OnInit, OnChanges {
   groupPosts: Post[] = []
