@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { TimeSincePipe } from '@discussit/core/pipes/time-since/time-since.pipe';
 
 @Component({
   
@@ -8,7 +9,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   standalone: true,
   templateUrl: './profile-comments.component.html',
   styleUrls: ['./profile-comments.component.scss'],
-  imports: [CommonModule, MatProgressSpinnerModule]
+  imports: [CommonModule, MatProgressSpinnerModule, TimeSincePipe]
 })
 export class ProfileCommentsComponent implements OnInit {
   @Input() comments: any[] = [];

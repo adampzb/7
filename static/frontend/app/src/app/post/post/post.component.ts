@@ -10,7 +10,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatCardModule } from '@angular/material/card';
+import { MatCardTitle } from '@angular/material/card';
+import { MatCardContent } from '@angular/material/card';
 import { SafeContentPipe } from '@discussit/core/pipes/safe-content/safe-content.pipe';
+import { TimeSincePipe } from '@discussit/core/pipes/time-since/time-since.pipe';
 
 @Component({
   selector: 'app-post',
@@ -24,7 +28,11 @@ import { SafeContentPipe } from '@discussit/core/pipes/safe-content/safe-content
     MatIconModule,
     MatMenuModule,
     MatDialogModule,
-    SafeContentPipe
+    MatCardModule,
+    MatCardTitle,
+    MatCardContent,
+    SafeContentPipe,
+    TimeSincePipe
   ]
 })
 export class PostComponent implements OnInit {

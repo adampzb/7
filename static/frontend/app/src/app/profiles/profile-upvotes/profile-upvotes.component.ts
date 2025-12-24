@@ -9,6 +9,7 @@ import { UserComment } from '@discussit/core/models/comment.model';
 import { CommonModule } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { PostComponent } from '@discussit/app/post/post/post.component';
+import { TimeSincePipe } from '@discussit/core/pipes/time-since/time-since.pipe';
 
 @Component({
   
@@ -16,7 +17,7 @@ import { PostComponent } from '@discussit/app/post/post/post.component';
   standalone: true,
   templateUrl: './profile-upvotes.component.html',
   styleUrls: ['./profile-upvotes.component.scss'],
-  imports: [CommonModule, MatProgressSpinnerModule, PostComponent]
+  imports: [CommonModule, MatProgressSpinnerModule, PostComponent, TimeSincePipe]
 })
 export class ProfileUpvotesComponent implements OnInit {
   isLoading: boolean = false;

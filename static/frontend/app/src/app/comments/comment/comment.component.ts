@@ -14,6 +14,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { TimeSincePipe } from '@discussit/core/pipes/time-since/time-since.pipe';
 import { SafeContentPipe } from '@discussit/core/pipes/safe-content/safe-content.pipe';
 import { CommentCreateComponent } from '../comment-create/comment-create.component';
+import { CommentFooterComponent } from '../comment-footer/comment-footer.component';
+import { CommentEditComponent } from '../comment-edit/comment-edit.component';
+import { CommentGroupComponent } from '../comment-group/comment-group.component';
 
 
 @Component({
@@ -31,7 +34,10 @@ import { CommentCreateComponent } from '../comment-create/comment-create.compone
     MatDialogModule,
     TimeSincePipe,
     SafeContentPipe,
-    CommentCreateComponent
+    CommentCreateComponent,
+    CommentFooterComponent,
+    CommentEditComponent,
+    CommentGroupComponent
   ]
 })
 export class CommentComponent implements OnInit {

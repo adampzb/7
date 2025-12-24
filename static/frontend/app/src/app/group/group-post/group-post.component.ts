@@ -16,6 +16,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { EditorModule } from '@tinymce/tinymce-angular';
+import { CreatePostComponent } from '@discussit/app/post/create-post/create-post.component';
 @Component({
   
   selector: 'app-group-post',
@@ -32,7 +33,8 @@ import { EditorModule } from '@tinymce/tinymce-angular';
     MatInputModule,
     MatSelectModule,
     MatProgressSpinnerModule,
-    EditorModule
+    EditorModule,
+    CreatePostComponent
   ]
 })
 export class GroupPostComponent implements OnInit {

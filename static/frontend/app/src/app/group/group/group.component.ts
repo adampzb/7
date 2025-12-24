@@ -11,8 +11,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatNavList } from '@angular/material/list';
 import { PostComponent } from '@discussit/app/post/post/post.component';
 import { PostLoaderComponent } from '@discussit/app/post/post-loader/post-loader.component';
+import { GroupFeedComponent } from '../group-feed/group-feed.component';
+import { SafeContentPipe } from '@discussit/core/pipes/safe-content/safe-content.pipe';
 
 @Component({
   
@@ -27,8 +32,13 @@ import { PostLoaderComponent } from '@discussit/app/post/post-loader/post-loader
     MatIconModule,
     MatDialogModule,
     MatTabsModule,
+    MatDividerModule,
+    MatExpansionModule,
+    MatNavList,
     PostComponent,
-    PostLoaderComponent
+    PostLoaderComponent,
+    GroupFeedComponent,
+    SafeContentPipe
   ]
 })
 export class GroupComponent implements OnInit {

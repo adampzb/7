@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { EditorModule } from '@tinymce/tinymce-angular';
+import { CommentEditComponent } from '../comment-edit/comment-edit.component';
 
 @Component({
   
@@ -21,7 +22,8 @@ import { EditorModule } from '@tinymce/tinymce-angular';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    EditorModule
+    EditorModule,
+    CommentEditComponent
   ]
 })
 export class CommentCreateComponent implements OnInit {
