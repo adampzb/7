@@ -77,6 +77,9 @@ if [ -d "$ANGULAR_DIR" ] && [ ! -d "$TARGET_ANGULAR_DIR" ]; then
     echo "✅ Angular source copied to build location"
 fi
 
+# Update target directory to match Django's STATIC_ROOT
+TARGET_ANGULAR_DIR="$PROJECT_DIR/staticfiles/frontend/app"
+
 if [ -d "$ANGULAR_DIR" ] && [ -f "$ANGULAR_DIR/package.json" ]; then
     echo "✅ Angular frontend found in: $ANGULAR_DIR"
     
@@ -114,7 +117,7 @@ if [ -d "$ANGULAR_DIR" ] && [ -f "$ANGULAR_DIR/package.json" ]; then
     
     # Navigate to Angular directory and install dependencies
     echo "📦 Installing Angular dependencies..."
-    cd "$ANGULAR_DIR" || error_exit "Failed to change to Angular directory"
+    cd "$TARGET_ANGULAR_DIR" || error_exit "Failed to change to Angular directory: $TARGET_ANGULAR_DIR"
     npm install || error_exit "Failed to install Angular dependencies"
     
     # Build Angular frontend with detailed output
@@ -150,9 +153,9 @@ if [ -d "$ANGULAR_DIR" ] && [ -f "$ANGULAR_DIR/package.json" ]; then
         echo "   - Files generated: ${FILE_COUNT}"
     fi
     
-    # Copy built files to static directory
-    echo "📁 Copying built files to static directory..."
-    rsync -a dist/ "$PROJECT_DIR/static/" || error_exit "Failed to copy static files"
+    # Copy built files to staticfiles directory (Django's STATIC_ROOT)
+    echo "📁 Copying built files to staticfiles directory..."
+    rsync -a dist/ "$PROJECT_DIR/staticfiles/" || error_exit "Failed to copy static files"
     
     # Return to project root
     cd "$PROJECT_DIR" || error_exit "Failed to return to project directory"
@@ -196,6 +199,30 @@ fi
 # Collect static files
 echo "🎨 Collecting static files..."
 python manage.py collectstatic --noinput || error_exit "Failed to collect static files"
+
+# Verify static files were collected correctly
+echo "🔍 Verifying static files..."
+if [ ! -d "$PROJECT_DIR/staticfiles" ]; then
+    error_exit "Static files directory not found after collection"
+fi
+
+# Check for critical static files
+MISSING_FILES=0
+for file in "admin/css/base.css" "frontend/app/dist/main.js" "frontend/app/dist/styles.css"; do
+    if [ ! -f "$PROJECT_DIR/staticfiles/$file" ]; then
+        echo "⚠️  Missing static file: $file"
+        MISSING_FILES=$((MISSING_FILES + 1))
+    fi
+done
+
+if [ $MISSING_FILES -gt 0 ]; then
+    echo "⚠️  $MISSING_FILES static files are missing. Some features may not work properly."
+fi
+
+# Set proper permissions for static files
+echo "🔐 Setting permissions for static files..."
+chmod -R 644 "$PROJECT_DIR/staticfiles/" || echo "⚠️  Failed to set static file permissions"
+chown -R www-data:www-data "$PROJECT_DIR/staticfiles/" 2>/dev/null || echo "💡 Note: Run 'sudo chown -R www-data:www-data staticfiles/' for proper Nginx access"
 
 # Set up environment variables from .env
 if [ -f ".env" ]; then
