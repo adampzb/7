@@ -96,6 +96,14 @@ else:
                 re_path(rf'^{file_name}$', serve, {'path': file_name, 'document_root': document_root}),
             ]
 
+# Add URL patterns for Angular assets directory
+angular_dist_path = os.path.join(settings.BASE_DIR, 'static', 'frontend', 'app', 'dist')
+if os.path.exists(angular_dist_path):
+    # Serve assets directory
+    urlpatterns += [
+        re_path(r'^assets/(?P<path>.*)$', serve, {'document_root': os.path.join(angular_dist_path, 'assets')}),
+    ]
+
 # Angular app routes - must come after static/media files
 urlpatterns += [
     # Serve Angular app at root for any unmatched routes (SPA routing)
