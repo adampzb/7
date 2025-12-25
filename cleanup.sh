@@ -159,6 +159,45 @@ else
     echo "ℹ️  Package lock file not found"
 fi
 
+# Clean up additional Angular artifacts
+echo "📦 Removing additional Angular artifacts..."
+if [ -d "staticfiles/frontend/app/.angular" ]; then
+    if [ "$DRY_RUN" = true ]; then
+        echo "  [DRY RUN] Would remove: staticfiles/frontend/app/.angular/"
+    else
+        rm -rf staticfiles/frontend/app/.angular/
+        echo "✅ Angular cache removed"
+    fi
+else
+    echo "ℹ️  Angular cache not found"
+fi
+
+# Clean up coverage reports
+echo "📊 Removing test coverage reports..."
+if [ -d "staticfiles/frontend/app/coverage" ]; then
+    if [ "$DRY_RUN" = true ]; then
+        echo "  [DRY RUN] Would remove: staticfiles/frontend/app/coverage/"
+    else
+        rm -rf staticfiles/frontend/app/coverage/
+        echo "✅ Coverage reports removed"
+    fi
+else
+    echo "ℹ️  Coverage reports not found"
+fi
+
+# Clean up test results
+echo "🧪 Removing test results..."
+if [ -d "staticfiles/frontend/app/test-results" ]; then
+    if [ "$DRY_RUN" = true ]; then
+        echo "  [DRY RUN] Would remove: staticfiles/frontend/app/test-results/"
+    else
+        rm -rf staticfiles/frontend/app/test-results/
+        echo "✅ Test results removed"
+    fi
+else
+    echo "ℹ️  Test results not found"
+fi
+
 # Clean up database files (SQLite and PostgreSQL)
 echo "🗃️  Removing database files..."
 
@@ -225,6 +264,33 @@ fi
 echo "🧹 Removing temporary files..."
 rm -f *.tmp *.log *.bak 2>/dev/null
 
+# Clean up system temporary files and cache
+echo "🧹 Cleaning system temporary files and cache..."
+if [ "$DRY_RUN" = true ]; then
+    echo "  [DRY RUN] Would clean system cache and temporary files"
+else
+    # Clean apt cache
+    apt-get clean 2>/dev/null || echo "⚠️  Apt cache cleanup failed or not available"
+    
+    # Clean journal logs
+    journalctl --vacuum-size=100M 2>/dev/null || echo "⚠️  Journal cleanup failed or not available"
+    
+    # Clean old kernels (keep current and one backup)
+    if command_exists dpkg; then
+        current_kernel=$(uname -r)
+        echo "🔧 Cleaning old kernels (keeping $current_kernel)..."
+        dpkg --list 'linux-image-*' | awk '/^ii/ { print $2 }' | grep -v "$current_kernel" | xargs -r sudo apt-get -y purge 2>/dev/null || echo "⚠️  Kernel cleanup failed"
+    fi
+    
+    # Clean Docker system
+    if command_exists docker; then
+        echo "🐳 Cleaning Docker system..."
+        docker system prune -a -f 2>/dev/null || echo "⚠️  Docker system cleanup failed"
+    fi
+    
+    echo "✅ System cache and temporary files cleaned"
+fi
+
 # Display cleanup summary
 echo "🎉 Cleanup completed successfully!"
 echo ""
@@ -233,6 +299,9 @@ echo "- Production services: Stopped and removed"
 echo "- Nginx configuration: Cleaned"
 echo "- Virtual environment: Removed"
 echo "- Angular build artifacts: Cleaned"
+echo "- Angular cache: Cleaned"
+echo "- Coverage reports: Cleaned"
+echo "- Test results: Cleaned"
 echo "- Static files: Cleaned (important files preserved)"
 echo "- Media files: Cleaned (with backup option)"
 echo "- Python cache: Cleaned"
@@ -242,6 +311,8 @@ echo "- Log files: Cleaned"
 echo "- Docker containers: Stopped and removed"
 echo "- Docker images: Pruned"
 echo "- Docker volumes: Pruned"
+echo "- System cache: Cleaned"
+echo "- Temporary files: Cleaned"
 echo ""
 echo "💡 Next steps for fresh deployment:"
 echo "1. Run: chmod +x deploy"
