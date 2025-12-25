@@ -18,6 +18,7 @@ from django.urls import path, include, re_path
 from django.views.generic import TemplateView
 from django.conf.urls.static import static
 from django.conf import settings
+import re  # Required for re.escape in URL patterns
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
@@ -104,8 +105,18 @@ if os.path.exists(angular_dist_path):
         re_path(r'^assets/(?P<path>.*)$', serve, {'document_root': os.path.join(angular_dist_path, 'assets')}),
     ]
 
-# Angular app routes - must come after static/media files
+# Add explicit URL patterns for Angular app files to ensure correct MIME types
+angular_files = ['runtime.js', 'polyfills.js', 'main.js', 'styles.css', 'index.html', 'favicon.ico']
+for file_name in angular_files:
+    file_path = os.path.join(angular_dist_path, file_name)
+    if os.path.exists(file_path):
+        urlpatterns += [
+            re_path(rf'^{re.escape(file_name)}$', serve, {'path': file_name, 'document_root': angular_dist_path}),
+        ]
+
+# Angular app routes - must come after ALL static file patterns
 urlpatterns += [
     # Serve Angular app at root for any unmatched routes (SPA routing)
+    # This must be the LAST pattern to prevent it from catching static files
     re_path(r'^.*$', AngularAppView.as_view(), name='angular_app'),
 ]
