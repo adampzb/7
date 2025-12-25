@@ -114,18 +114,6 @@
             ]
           }
         },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:playwright",
-          "options": {
-            "playwrightConfig": "e2e/playwright.config.ts",
-            "devServerTarget": "discussit-app:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "discussit-app:serve:production"
-            }
-          }
-        }
       }
     }
   },
