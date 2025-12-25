@@ -25,7 +25,8 @@
   margin-bottom: 12px;
 }
 
-::ng-deep {
+/* Replace ::ng-deep with proper component styling for Material menu */
+:host {
   .mat-menu-item {
     line-height: 30px;
     padding    : 0 12px ;

@@ -37,8 +37,13 @@ a {
   }
 }
 
-::ng-deep .mat-spinner-primary.mat-progress-spinner circle, .mat-spinner circle {
+.mat-spinner-primary.mat-progress-spinner circle, .mat-spinner circle {
   stroke: #DC281E;
+}
+
+/* CDK Global Scrollblock - moved from component to global styles */
+.cdk-global-scrollblock {
+  position: static;
 }
 
 h1, h2, h3, h4, h5, h6, b {

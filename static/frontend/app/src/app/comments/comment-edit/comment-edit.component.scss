@@ -20,22 +20,15 @@
   color: #707070!important;
 }
 
-::ng-deep {
+/* Replace ::ng-deep with proper component styling */
+:host {
   .mat-form-field-wrapper {
     padding-bottom: 0 !important;
   }
   .mat-form-field-infix {
     border-top: 0;
   }
-}
-
-@media (max-width: 640px) {
-  .col-user {
-    max-width: 15%!important;
-  }
-}
-
-::ng-deep {
+  
   .comment-input-field .mat-form-field-wrapper {
     padding-bottom: 0!important
   }
@@ -44,6 +37,12 @@
   }
   .comment-input-field .mat-form-field-infix {
     border-top: 0!important;
+  }
+}
+
+@media (max-width: 640px) {
+  .col-user {
+    max-width: 15%!important;
   }
 }
 // .textarea-font {
