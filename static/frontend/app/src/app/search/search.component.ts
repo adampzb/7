@@ -9,7 +9,6 @@ import { RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { PostComponent } from '../post/post/post.component';
-import { PostLoaderComponent } from '../post/post-loader/post-loader.component';
 
 @Component({
   standalone: true,
@@ -21,8 +20,7 @@ import { PostLoaderComponent } from '../post/post-loader/post-loader.component';
     RouterModule,
     MatButtonModule,
     MatProgressSpinnerModule,
-    PostComponent,
-    PostLoaderComponent
+    PostComponent
   ]
 })
 export class SearchComponent implements OnInit {

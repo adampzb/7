@@ -9,7 +9,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
-import { PostComponent } from '../post/post.component';
 import { CommentGroupComponent } from '@discussit/app/comments/comment-group/comment-group.component';
 import { SafeContentPipe } from '@discussit/core/pipes/safe-content/safe-content.pipe';
 
@@ -26,7 +25,6 @@ import { SafeContentPipe } from '@discussit/core/pipes/safe-content/safe-content
     MatIconModule,
     MatProgressSpinnerModule,
     MatCardModule,
-    PostComponent,
     CommentGroupComponent,
     SafeContentPipe
   ]

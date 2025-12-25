@@ -12,8 +12,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
 import { TimeSincePipe } from '@discussit/core/pipes/time-since/time-since.pipe';
-import { SafeContentPipe } from '@discussit/core/pipes/safe-content/safe-content.pipe';
-import { CommentCreateComponent } from '../comment-create/comment-create.component';
 import { CommentFooterComponent } from '../comment-footer/comment-footer.component';
 import { CommentEditComponent } from '../comment-edit/comment-edit.component';
 import { CommentGroupComponent } from '../comment-group/comment-group.component';
@@ -33,8 +31,6 @@ import { CommentGroupComponent } from '../comment-group/comment-group.component'
     MatMenuModule,
     MatDialogModule,
     TimeSincePipe,
-    SafeContentPipe,
-    CommentCreateComponent,
     CommentFooterComponent,
     CommentEditComponent,
     CommentGroupComponent

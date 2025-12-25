@@ -13,13 +13,11 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatNavList } from '@angular/material/list';
 import { MatListItem } from '@angular/material/list';
-import { ProfileOverviewComponent } from '../profile-overview/profile-overview.component';
 import { ProfilePostsComponent } from '../profile-posts/profile-posts.component';
 import { ProfileCommentsComponent } from '../profile-comments/profile-comments.component';
 import { ProfileBookmarksComponent } from '../profile-bookmarks/profile-bookmarks.component';
 import { ProfileUpvotesComponent } from '../profile-upvotes/profile-upvotes.component';
 import { ProfileDownvotesComponent } from '../profile-downvotes/profile-downvotes.component';
-import { ProfileHistoryComponent } from '../profile-history/profile-history.component';
 
 @Component({
   
@@ -36,13 +34,11 @@ import { ProfileHistoryComponent } from '../profile-history/profile-history.comp
     MatProgressSpinnerModule,
     MatNavList,
     MatListItem,
-    ProfileOverviewComponent,
     ProfilePostsComponent,
     ProfileCommentsComponent,
     ProfileBookmarksComponent,
     ProfileUpvotesComponent,
-    ProfileDownvotesComponent,
-    ProfileHistoryComponent
+    ProfileDownvotesComponent
   ]
 })
 export class ProfileComponent implements OnInit {

@@ -8,7 +8,6 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { PostComponent } from '@discussit/app/post/post/post.component';
-import { PostLoaderComponent } from '@discussit/app/post/post-loader/post-loader.component';
 
 @Component({
   
@@ -20,8 +19,7 @@ import { PostLoaderComponent } from '@discussit/app/post/post-loader/post-loader
     CommonModule,
     MatButtonModule,
     MatProgressSpinnerModule,
-    PostComponent,
-    PostLoaderComponent
+    PostComponent
   ]
 })
 export class ProfilePostsComponent implements OnInit {
