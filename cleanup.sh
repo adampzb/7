@@ -76,20 +76,22 @@ fi
 echo "🎨 Removing staticfiles (build artifacts)..."
 # Only remove specific build artifacts, preserve important files
 if [ -d "staticfiles" ]; then
-    # Keep these important directories/files
+    # Preserve these critical directories and files, remove only unnecessary build artifacts
     find staticfiles -mindepth 1 -maxdepth 1 \
-        \( 
+        ! \( 
         -name "admin" -o \
         -name "rest_framework" -o \
         -name "django_tinymce" -o \
         -name "drf-yasg" -o \
         -name "guardian" -o \
+        -name "frontend" -o \
+        -name "assets" -o \
         -name "*.js" -o \
         -name "*.css" -o \
         -name "*.ico" -o \
         -name "*.html" -o \
         -name "*.txt" \
-        \) -prune -o -exec rm -rf {} + 2>/dev/null
+        \) -exec rm -rf {} + 2>/dev/null
     echo "✅ Staticfiles build artifacts cleaned (important files preserved)"
 else
     echo "ℹ️  Staticfiles directory not found"
@@ -122,81 +124,9 @@ find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null
 find . -name "*.pyc" -delete 2>/dev/null
 find . -name "*.pyo" -delete 2>/dev/null
 
-# Clean up Angular build artifacts (only from staticfiles, preserve source in static)
-echo "📦 Removing Angular build artifacts from staticfiles..."
-if [ -d "staticfiles/frontend/app/dist" ]; then
-    if [ "$DRY_RUN" = true ]; then
-        echo "  [DRY RUN] Would remove: staticfiles/frontend/app/dist/"
-    else
-        rm -rf staticfiles/frontend/app/dist/
-        echo "✅ Angular build artifacts removed"
-    fi
-else
-    echo "ℹ️  Angular build artifacts not found"
-fi
-
-# Clean up Node.js artifacts (only from staticfiles, preserve source in static)
-echo "📦 Removing Node.js artifacts from staticfiles..."
-if [ -d "staticfiles/frontend/app/node_modules" ]; then
-    if [ "$DRY_RUN" = true ]; then
-        echo "  [DRY RUN] Would remove: staticfiles/frontend/app/node_modules/"
-    else
-        rm -rf staticfiles/frontend/app/node_modules/
-        echo "✅ Node modules removed"
-    fi
-else
-    echo "ℹ️  Node modules not found"
-fi
-
-if [ -f "staticfiles/frontend/app/package-lock.json" ]; then
-    if [ "$DRY_RUN" = true ]; then
-        echo "  [DRY RUN] Would remove: staticfiles/frontend/app/package-lock.json"
-    else
-        rm -f staticfiles/frontend/app/package-lock.json
-        echo "✅ Package lock file removed"
-    fi
-else
-    echo "ℹ️  Package lock file not found"
-fi
-
-# Clean up additional Angular artifacts
-echo "📦 Removing additional Angular artifacts..."
-if [ -d "staticfiles/frontend/app/.angular" ]; then
-    if [ "$DRY_RUN" = true ]; then
-        echo "  [DRY RUN] Would remove: staticfiles/frontend/app/.angular/"
-    else
-        rm -rf staticfiles/frontend/app/.angular/
-        echo "✅ Angular cache removed"
-    fi
-else
-    echo "ℹ️  Angular cache not found"
-fi
-
-# Clean up coverage reports
-echo "📊 Removing test coverage reports..."
-if [ -d "staticfiles/frontend/app/coverage" ]; then
-    if [ "$DRY_RUN" = true ]; then
-        echo "  [DRY RUN] Would remove: staticfiles/frontend/app/coverage/"
-    else
-        rm -rf staticfiles/frontend/app/coverage/
-        echo "✅ Coverage reports removed"
-    fi
-else
-    echo "ℹ️  Coverage reports not found"
-fi
-
-# Clean up test results
-echo "🧪 Removing test results..."
-if [ -d "staticfiles/frontend/app/test-results" ]; then
-    if [ "$DRY_RUN" = true ]; then
-        echo "  [DRY RUN] Would remove: staticfiles/frontend/app/test-results/"
-    else
-        rm -rf staticfiles/frontend/app/test-results/
-        echo "✅ Test results removed"
-    fi
-else
-    echo "ℹ️  Test results not found"
-fi
+# Note: Angular artifacts cleanup is now handled by the general static files cleanup above
+# The frontend/ and assets/ directories are preserved, but build artifacts within them
+# are removed by the comprehensive cleanup logic
 
 # Clean up database files (SQLite and PostgreSQL)
 echo "🗃️  Removing database files..."
