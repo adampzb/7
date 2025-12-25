@@ -91,6 +91,7 @@
             "main": "src/test.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
+            "polyfills": "src/polyfills.ts",
             "assets": [
               "src/favicon.ico",
               "src/assets"
@@ -98,7 +99,10 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "codeCoverage": false,
+            "watch": false,
+            "browsers": "ChromeHeadless"
           }
         },
         "lint": {
@@ -111,9 +115,9 @@
           }
         },
         "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
+          "builder": "@angular-devkit/build-angular:playwright",
           "options": {
-            "protractorConfig": "e2e/protractor.conf.js",
+            "playwrightConfig": "e2e/playwright.config.ts",
             "devServerTarget": "discussit-app:serve"
           },
           "configurations": {
