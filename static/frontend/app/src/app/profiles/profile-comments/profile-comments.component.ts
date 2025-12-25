@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TimeSincePipe } from '@discussit/core/pipes/time-since/time-since.pipe';
-import { NgFor, NgIf } from '@angular/common';
+import { NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 
 @Component({
   
@@ -10,7 +10,7 @@ import { NgFor, NgIf } from '@angular/common';
   standalone: true,
   templateUrl: './profile-comments.component.html',
   styleUrls: ['./profile-comments.component.scss'],
-  imports: [CommonModule, MatProgressSpinnerModule, TimeSincePipe, NgFor, NgIf]
+  imports: [CommonModule, MatProgressSpinnerModule, TimeSincePipe, NgFor, NgIf, NgTemplateOutlet]
 })
 export class ProfileCommentsComponent implements OnInit {
   @Input() comments: any[] = [];
