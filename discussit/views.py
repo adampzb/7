@@ -19,10 +19,16 @@ class AngularAppView(TemplateView):
         # Ensure CSRF token is set in cookies
         get_token(request)
         
-        # Check if index.html exists in staticfiles, then fall back to static/ directory
+        # Check if index.html exists in the Angular dist directory
+        angular_dist_path = os.path.join(settings.BASE_DIR, 'static', 'frontend', 'app', 'dist')
+        index_path = os.path.join(angular_dist_path, 'index.html')
+        
+        if os.path.exists(index_path):
+            return serve(request, 'index.html', document_root=angular_dist_path)
+        
+        # Fallback to old behavior if dist directory doesn't exist
         index_path = os.path.join(settings.STATIC_ROOT, 'index.html')
         if not os.path.exists(index_path):
-            # Fall back to static/ directory where Angular files are built
             index_path = os.path.join(settings.BASE_DIR, 'static', 'index.html')
         
         if os.path.exists(index_path):
