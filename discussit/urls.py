@@ -73,10 +73,16 @@ import os
 # Create URL patterns for Angular files at root
 angular_files = ['runtime.js', 'polyfills.js', 'main.js', 'styles.css', 'index.html']
 for file_name in angular_files:
+    # First check in STATIC_ROOT, then fall back to static/ directory
     file_path = os.path.join(settings.STATIC_ROOT, file_name)
+    if not os.path.exists(file_path):
+        # Fall back to static/ directory where Angular files are built
+        file_path = os.path.join(settings.BASE_DIR, 'static', file_name)
+    
     if os.path.exists(file_path):
+        document_root = settings.STATIC_ROOT if os.path.exists(os.path.join(settings.STATIC_ROOT, file_name)) else os.path.join(settings.BASE_DIR, 'static')
         urlpatterns += [
-            re_path(rf'^{file_name}$', serve, {'path': file_name, 'document_root': settings.STATIC_ROOT}),
+            re_path(rf'^{file_name}$', serve, {'path': file_name, 'document_root': document_root}),
         ]
 
 # Angular app routes - must come after static/media files
