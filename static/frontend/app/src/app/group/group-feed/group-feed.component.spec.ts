@@ -8,7 +8,7 @@ describe('GroupFeedComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GroupFeedComponent ]
+      imports: [ GroupFeedComponent ]
     })
     .compileComponents();
   });

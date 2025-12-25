@@ -8,7 +8,7 @@ describe('ProfileDownvotesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ProfileDownvotesComponent ]
+      imports: [ ProfileDownvotesComponent ]
     })
     .compileComponents();
   });

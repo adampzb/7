@@ -8,7 +8,7 @@ describe('ProfileHistoryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ProfileHistoryComponent ]
+      imports: [ ProfileHistoryComponent ]
     })
     .compileComponents();
   });

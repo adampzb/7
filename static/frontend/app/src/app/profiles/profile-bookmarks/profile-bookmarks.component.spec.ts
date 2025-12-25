@@ -8,7 +8,7 @@ describe('ProfileBookmarksComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ProfileBookmarksComponent ]
+      imports: [ ProfileBookmarksComponent ]
     })
     .compileComponents();
   });

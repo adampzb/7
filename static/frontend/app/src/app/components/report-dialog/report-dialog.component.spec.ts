@@ -8,7 +8,7 @@ describe('ReportDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ReportDialogComponent ]
+      imports: [ ReportDialogComponent ]
     })
     .compileComponents();
   });

@@ -8,7 +8,7 @@ describe('GroupRouterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GroupRouterComponent ]
+      imports: [ GroupRouterComponent ]
     })
     .compileComponents();
   });

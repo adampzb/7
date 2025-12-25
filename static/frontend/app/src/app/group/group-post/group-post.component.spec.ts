@@ -8,7 +8,7 @@ describe('GroupPostComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GroupPostComponent ]
+      imports: [ GroupPostComponent ]
     })
     .compileComponents();
   });

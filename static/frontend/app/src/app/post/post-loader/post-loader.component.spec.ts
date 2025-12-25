@@ -8,7 +8,7 @@ describe('PostLoaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PostLoaderComponent ]
+      imports: [ PostLoaderComponent ]
     })
     .compileComponents();
   });
